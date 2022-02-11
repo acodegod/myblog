@@ -1,0 +1,1567 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>欢迎来到包子&#39;s Blog</title>
+    <url>/post/helloword/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">练习Bug时长两年半的程序员</blockquote>]]></content>
+  </entry>
+  <entry>
+    <title>解析神器xpath使用教程</title>
+    <url>/post/xpath-use/</url>
+    <content><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><blockquote>
+<p><strong>XPath</strong> (XML Path Language) 是一门在 HTML\XML 文档中查找信息的<strong>语言</strong>，可用来在 HTML\XML 文档中对<strong>元素和属性进行遍历</strong>。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="为什么要学习xpath和parsel"><a href="#为什么要学习xpath和parsel" class="headerlink" title="为什么要学习xpath和parsel"></a>为什么要学习xpath和parsel</h2><ul>
+<li>parsel是一款高性能的 Python HTML/XML 解析器。</li>
+<li>将字符串转化为Selector对象,Selector对象具有xpath的方法,返回结果的列表，能够接受bytes类型的数据和str类型的数据。</li>
+<li>我们可以利用XPath，来快速的定位特定元素以及获取节点信息</li>
+</ul>
+<h2 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h2><blockquote>
+<p>每个html的标签我们都称之为节点。（根节点、子节点、同级节点）</p>
+</blockquote>
+<p><img src="../../img/jdgx.png" alt="节点的关系"></p>
+<h1 id="xpath说明"><a href="#xpath说明" class="headerlink" title="xpath说明"></a>xpath说明</h1><blockquote>
+<p><strong>XPath</strong> 使用路径表达式来选取 XML 文档中的节点或者节点集。</p>
+</blockquote>
+<h2 id="xpath表达式"><a href="#xpath表达式" class="headerlink" title="xpath表达式"></a>xpath表达式</h2><table>
+<thead>
+<tr>
+<th align="center">表达式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">nodename</td>
+<td>选中该元素。</td>
+</tr>
+<tr>
+<td align="center">/</td>
+<td>从根节点选取、或者是元素和元素间的过渡。</td>
+</tr>
+<tr>
+<td align="center">//</td>
+<td>从匹配选择的当前节点选择文档中的节点，而不考虑它们的位置。跨节点获取标签</td>
+</tr>
+<tr>
+<td align="center">.</td>
+<td>选取当前节点。</td>
+</tr>
+<tr>
+<td align="center">..</td>
+<td>选取当前节点的父节点。</td>
+</tr>
+<tr>
+<td align="center">@</td>
+<td>选取属性。</td>
+</tr>
+<tr>
+<td align="center">text()</td>
+<td>选取文本。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>选取未知节点</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>通配符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>匹配任何元素节点。</td>
+</tr>
+<tr>
+<td>@*</td>
+<td>匹配任何属性节点。</td>
+</tr>
+<tr>
+<td>node()</td>
+<td>匹配任何类型的节点。</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>/div/*</th>
+<th>选取 div元素的所有子元素。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>//*</td>
+<td>选取文档中的所有元素。</td>
+</tr>
+<tr>
+<td>//title[@*]</td>
+<td>选取所有带有属性的 title 元素。</td>
+</tr>
+</tbody></table>
+<h1 id="xpath的使用方法"><a href="#xpath的使用方法" class="headerlink" title="xpath的使用方法"></a>xpath的使用方法</h1><p>要用到parsel模块</p>
+<p>import parsel</p>
+<p>使用xpath的前提是 具有xpath方法  –&gt; Selector对象</p>
+<p>提取到的数据返回一个列表</p>
+<p>转换数据类型方法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">data = parsel.Selector(html_str).extract()  # parsel能够把缺失的html标签补充完成</span><br><span class="line">data = parsel.Selector(html_str)  # parsel能够把缺失的html标签补充完成</span><br></pre></td></tr></table></figure>
+
+<h1 id="xpath表达式说明"><a href="#xpath表达式说明" class="headerlink" title="xpath表达式说明"></a>xpath表达式说明</h1><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;<span class="name">ul</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;item-1&quot;</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;link1.html&quot;</span>&gt;</span>第一个<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">li</span>&gt;</span> </span><br><span class="line">		 </span><br><span class="line">		<span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;item-2&quot;</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;link2.html&quot;</span>&gt;</span>第二个<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">li</span>&gt;</span> </span><br><span class="line">		 </span><br><span class="line">		<span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;item-3&quot;</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;link3.html&quot;</span>&gt;</span>第三个<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">li</span>&gt;</span> </span><br><span class="line">		 </span><br><span class="line">		<span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;item-4&quot;</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;link4.html&quot;</span>&gt;</span>第四个<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">li</span>&gt;</span> </span><br><span class="line">		 </span><br><span class="line">		<span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;item-5&quot;</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;link5.html&quot;</span>&gt;</span>第五个<span class="tag">&lt;/<span class="name">a</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<ol>
+<li>从根节点开始，获取所有 a 标签</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = data.xpath(<span class="string">&#x27;/html/body/div/ul/li/a&#x27;</span>).extract()</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>跨节点获取所有 a 标签</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = data.xpath(<span class="string">&#x27;//a&#x27;</span>).extract()</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+
+<ol start="3">
+<li>选取当前节点   使用场景：需要对选取的标签的下一级标签进行多次提取</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = data.xpath(<span class="string">&#x27;//ul&#x27;</span>)</span><br><span class="line">result2 = result.xpath(<span class="string">&#x27;./li&#x27;</span>).extract()</span><br><span class="line">result3 = result.xpath(<span class="string">&#x27;./li/a&#x27;</span>).extract()</span><br><span class="line"><span class="built_in">print</span>(result3)</span><br></pre></td></tr></table></figure>
+
+
+<ol start="4">
+<li>选取当前节点的父节点,获取父节点的class属性值</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = data.xpath(<span class="string">&#x27;//a&#x27;</span>)</span><br><span class="line">result4 = result.xpath(<span class="string">&#x27;../@class&#x27;</span>).extract()</span><br><span class="line"><span class="built_in">print</span>(result4)</span><br></pre></td></tr></table></figure>
+
+
+<ol start="5">
+<li>获取第三个 li 标签的节点（两种方法）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = data.xpath(<span class="string">&#x27;//li[3]&#x27;</span>).extract()</span><br><span class="line">result = data.xpath(<span class="string">&#x27;//li&#x27;</span>)[<span class="number">2</span>].extract()</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>通过定位属性的方法获取第四个 a 标签</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = data.xpath(<span class="string">&#x27;//a[@href=&quot;link4.html&quot;]&#x27;</span>).extract()</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>用属性定位标签，获取第四个 a 标签包裹的文本内容</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = data.xpath(<span class="string">&#x27;//a[@href=&quot;link4.html&quot;]/text()&#x27;</span>).extract()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+
+<ol start="8">
+<li>获取第五个 a 标签的href属性值</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = data.xpath(<span class="string">&#x27;//li[5]/a/@href&#x27;</span>).extract()</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>可以将上面的代码复制到本地 print一下</strong></p>
+<hr>
+<p>或者直接使用谷歌浏览器插件 xpath helper </p>
+<hr>
+<p><strong>下载方式：</strong></p>
+<ol>
+<li><p>谷歌商店下载–&gt; <a href="https://chrome.google.com/webstore/detail/xpath-helper/hgimnogjllphhhkhlmebbmlgjoejdpjl?utm_source=chrome-ntp-icon">下载地址</a></p>
+</li>
+<li><p>本地下载–&gt; <a href="../../img/xpath.crx">下载地址</a></p>
+</li>
+</ol>
+<blockquote>
+<p>本地下载安装方法可以百度，很简单的–&gt;<a href="https://www.baidu.com/s?ie=UTF-8&wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B">传送门</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Python教程</category>
+      </categories>
+      <tags>
+        <tag>xpath</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java学习路线图（完整详细2021版）</title>
+    <url>/post/java-study/</url>
+    <content><![CDATA[<p><strong>注—-本次学习路线图中会插一些B站的视频资源，源码、资料啥的直接去他们官网下载——（网盘容易失效所以就不放网盘了）</strong></p>
+<h2 id="Java零基础"><a href="#Java零基础" class="headerlink" title="Java零基础"></a><strong>Java零基础</strong></h2><p><img src="/images/java-study1.png"></p>
+<p>推荐教程：</p>
+<p>1、Java小白学习指南</p>
+<p><a href="https://www.bilibili.com/video/BV1wv411B7q3">https://www.bilibili.com/video/BV1wv411B7q3</a></p>
+<p>2、Java零基础</p>
+<p><a href="https://www.bilibili.com/video/BV1Rx411876f">https://www.bilibili.com/video/BV1Rx411876f</a></p>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a><strong>数据库</strong></h2><p>推荐教程：</p>
+<p>1、MySQL数据库</p>
+<p><a href="https://www.bilibili.com/video/BV1fx411X7BD">https://www.bilibili.com/video/BV1fx411X7BD</a></p>
+<p>2、JDBC</p>
+<p><a href="https://www.bilibili.com/video/BV1Bt41137iB">https://www.bilibili.com/video/BV1Bt41137iB</a></p>
+<p>3、Oracle（有兴趣的可以学习一下）</p>
+<p><a href="https://www.bilibili.com/video/BV1kx411s71n">https://www.bilibili.com/video/BV1kx411s71n</a></p>
+<h2 id="Web前端"><a href="#Web前端" class="headerlink" title="Web前端"></a><strong>Web前端</strong></h2><p><img src="/images/java-study2.png"></p>
+<p><img src="/images/java-study3.png"></p>
+<p>教程链接：</p>
+<p>1、HTML</p>
+<p><a href="https://www.bilibili.com/video/BV11t411K74Q">https://www.bilibili.com/video/BV11t411K74Q</a></p>
+<p>2、CSS</p>
+<p><a href="https://www.bilibili.com/video/BV1tt411M7Vj">https://www.bilibili.com/video/BV1tt411M7Vj</a></p>
+<p>3、JavaScript</p>
+<p><a href="https://www.bilibili.com/video/BV1Ft411N7R3">https://www.bilibili.com/video/BV1Ft411N7R3</a></p>
+<h2 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a><strong>JavaWeb</strong></h2><p><img src="/images/java-study4.png"></p>
+<p><img src="/images/java-study5.png"></p>
+<p><img src="/images/java-study6.png"></p>
+<p>教程链接：</p>
+<p>1、JavaWeb【IDEA版本】</p>
+<p><a href="https://www.bilibili.com/video/BV1Yz411B7Pk">https://www.bilibili.com/video/BV1Yz411B7Pk</a></p>
+<p>2、JavaWeb【Eclipse经典版】</p>
+<p><a href="https://www.bilibili.com/video/BV1Yz411B7Pk">https://www.bilibili.com/video/BV1Yz411B7Pk</a></p>
+<h2 id="Web进阶"><a href="#Web进阶" class="headerlink" title="Web进阶"></a><strong>Web进阶</strong></h2><p><img src="/images/java-study7.png"></p>
+<p>教程链接：</p>
+<p>1、AJAX</p>
+<p><a href="https://www.bilibili.com/video/BV15k4y167XM">https://www.bilibili.com/video/BV15k4y167XM</a></p>
+<p>2、jQuery</p>
+<p><a href="https://www.bilibili.com/video/BV1Jg4y1B7n4">https://www.bilibili.com/video/BV1Jg4y1B7n4</a></p>
+<p>JavaWEB项目实战</p>
+<p><img src="/images/java-study8.png"></p>
+<p>教程链接：</p>
+<p>1、SVN（路线图里没有写，但是我还是推荐，学习项目之前先看这个）</p>
+<p><a href="https://www.bilibili.com/video/BV1ux411j7H2">https://www.bilibili.com/video/BV1ux411j7H2</a></p>
+<p>2、EGOV项目（电子政务系统）路线图里没有但是感觉这个项目讲的真的很好就推荐了</p>
+<p><a href="https://www.bilibili.com/video/BV194411c7SL">https://www.bilibili.com/video/BV194411c7SL</a></p>
+<p>3、JDK动态代{过}{滤}理（学习CRM项目之前先看这个）</p>
+<p><a href="https://www.bilibili.com/video/BV1HZ4y1p7F1">https://www.bilibili.com/video/BV1HZ4y1p7F1</a></p>
+<p>4、Maven入门（这个学习项目必须提前要学习）</p>
+<p><a href="https://www.bilibili.com/video/BV1dp4y1Q7Hf">https://www.bilibili.com/video/BV1dp4y1Q7Hf</a></p>
+<p>5、CRM项目实战（学习之前建议先看看mybatis）</p>
+<p><a href="https://www.bilibili.com/video/BV1fT4y1E7a6">https://www.bilibili.com/video/BV1fT4y1E7a6</a></p>
+<p>6、Linux</p>
+<p><a href="https://www.bilibili.com/video/BV1Li4y1V7pG">https://www.bilibili.com/video/BV1Li4y1V7pG</a></p>
+<h2 id="后端框架"><a href="#后端框架" class="headerlink" title="后端框架"></a><strong>后端框架</strong></h2><p><img src="/images/java-study9.png"></p>
+<p><img src="/images/java-study10.png"></p>
+<p><img src="/images/java-study11.png"></p>
+<p>教程链接：</p>
+<p>1、Mybatis【IDEA版】</p>
+<p><a href="https://www.bilibili.com/video/BV185411s7Ry">https://www.bilibili.com/video/BV185411s7Ry</a></p>
+<p>2、Spring【IDEA版】</p>
+<p><a href="https://www.bilibili.com/video/BV1nz4y1d7uy">https://www.bilibili.com/video/BV1nz4y1d7uy</a></p>
+<p>3、SpringMVC【IDEA版】</p>
+<p><a href="https://www.bilibili.com/video/BV1sk4y167pD">https://www.bilibili.com/video/BV1sk4y167pD</a></p>
+<p>4、典藏版SSM（Eclipse全套）</p>
+<p><a href="https://www.bilibili.com/video/BV1Ug4y1i7W7">https://www.bilibili.com/video/BV1Ug4y1i7W7</a></p>
+<p>5、SSH框架全套【如果有时间的话可以选择性的学习一下】</p>
+<p><a href="https://www.bilibili.com/video/BV1uT4y1g7Qo">https://www.bilibili.com/video/BV1uT4y1g7Qo</a></p>
+<h2 id="高端技术"><a href="#高端技术" class="headerlink" title="高端技术"></a><strong>高端技术</strong></h2><p>教程链接：</p>
+<p>1、Dubbo</p>
+<p><a href="https://www.bilibili.com/video/BV1Sk4y197eD">https://www.bilibili.com/video/BV1Sk4y197eD</a></p>
+<p>2、Redis</p>
+<p><a href="https://www.bilibili.com/video/BV1Uz4y1X72A">https://www.bilibili.com/video/BV1Uz4y1X72A</a></p>
+<p>3、Maven进阶</p>
+<p><a href="https://www.bilibili.com/video/BV1kg4y187td">https://www.bilibili.com/video/BV1kg4y187td</a></p>
+<p>4、springboot</p>
+<p><a href="https://www.bilibili.com/video/BV1PZ4y1j7QK">https://www.bilibili.com/video/BV1PZ4y1j7QK</a></p>
+<p>5、Nginx</p>
+<p><a href="https://www.bilibili.com/video/BV11V411C7r9">https://www.bilibili.com/video/BV11V411C7r9</a></p>
+<p>6、SpringSession</p>
+<p><a href="https://www.bilibili.com/video/BV1iK411p7dZ">https://www.bilibili.com/video/BV1iK411p7dZ</a></p>
+<p>7、FastDFS</p>
+<p><a href="https://www.bilibili.com/video/BV1ta4y1v7Kw">https://www.bilibili.com/video/BV1ta4y1v7Kw</a></p>
+<p>8、RabbitMQ</p>
+<p><a href="https://www.bilibili.com/video/BV1Ap4y1D7tU">https://www.bilibili.com/video/BV1Ap4y1D7tU</a></p>
+<p>9、SpringCloud</p>
+<p><a href="https://www.bilibili.com/video/BV1aC4y1p7Qi">https://www.bilibili.com/video/BV1aC4y1p7Qi</a></p>
+<p>10、SpringCloudAlibaba</p>
+<p><a href="https://www.bilibili.com/video/BV1nK4y1j7gL">https://www.bilibili.com/video/BV1nK4y1j7gL</a></p>
+<p>11、Docker</p>
+<p><a href="https://www.bilibili.com/video/BV1QA411L7B5">https://www.bilibili.com/video/BV1QA411L7B5</a></p>
+<p>12、K8S</p>
+<p><a href="https://www.bilibili.com/video/BV1KU4y147g3">https://www.bilibili.com/video/BV1KU4y147g3</a></p>
+<p>13、MySQL集群</p>
+<p><a href="https://www.bilibili.com/video/BV1Rg4y1i7VR">https://www.bilibili.com/video/BV1Rg4y1i7VR</a></p>
+<p>14、Mycat</p>
+<p><a href="https://www.bilibili.com/video/BV1gK4y1b7iU">https://www.bilibili.com/video/BV1gK4y1b7iU</a></p>
+<p>15、Shiro</p>
+<p><a href="https://www.bilibili.com/video/BV14T4y1g75M">https://www.bilibili.com/video/BV14T4y1g75M</a></p>
+<p>16、互联网大型电商项目实战</p>
+<p><a href="https://www.bilibili.com/video/BV1RQ4y1K7Pq">https://www.bilibili.com/video/BV1RQ4y1K7Pq</a></p>
+<p><img src="/images/java-study12.png"></p>
+<p><img src="/images/java-study13.png"></p>
+<p>转载自：<a href="https://www.52pojie.cn/thread-1354997-1-1.html">https://www.52pojie.cn/thread-1354997-1-1.html</a></p>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>JAVA</tag>
+        <tag>学习路线</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL学习笔记1</title>
+    <url>/post/study_mysql_one/</url>
+    <content><![CDATA[<h2 id="数据库的基本概念"><a href="#数据库的基本概念" class="headerlink" title="数据库的基本概念"></a>数据库的基本概念</h2><pre><code>1. 数据库的英文单词： DataBase 简称 ： DB
+2. 什么数据库？
+    * 用于存储和管理数据的仓库。
+
+3. 数据库的特点：
+    1. 持久化存储数据的。其实数据库就是一个文件系统
+    2. 方便存储和管理数据
+    3. 使用了统一的方式操作数据库 -- SQL
+</code></pre>
+<h1 id="MySQL数据库软件"><a href="#MySQL数据库软件" class="headerlink" title="MySQL数据库软件"></a>MySQL数据库软件</h1><pre><code>1. 安装
+    * 参见《MySQL基础.pdf》
+2. 卸载
+    1. 去mysql的安装目录找到my.ini文件
+        * 复制 datadir=&quot;C:/ProgramData/MySQL/MySQL Server 5.5/Data/&quot;
+    2. 卸载MySQL
+    3. 删除C:/ProgramData目录下的MySQL文件夹。
+    
+3. 配置
+    * MySQL服务启动
+        1. 手动。
+        2. cmd--&gt; services.msc 打开服务的窗口
+        3. 使用管理员打开cmd
+            * net start mysql : 启动mysql的服务
+            * net stop mysql:关闭mysql服务
+    * MySQL登录
+        1. mysql -uroot -p密码
+        2. mysql -hip -uroot -p连接目标的密码
+        3. mysql --host=ip --user=root --password=连接目标的密码
+    * MySQL退出
+        1. exit
+        2. quit
+
+    * MySQL目录结构
+        1. MySQL安装目录：basedir=&quot;D:/develop/MySQL/&quot;
+            * 配置文件 my.ini
+        2. MySQL数据目录：datadir=&quot;C:/ProgramData/MySQL/MySQL Server 5.5/Data/&quot;
+            * 几个概念
+                * 数据库：文件夹
+                * 表：文件
+                * 数据：数据
+</code></pre>
+<h1 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h1><pre><code>1.什么是SQL？
+    Structured Query Language：结构化查询语言
+    其实就是定义了操作所有关系型数据库的规则。每一种数据库操作的方式存在不一样的地方，称为“方言”。
+    
+2.SQL通用语法
+    1. SQL 语句可以单行或多行书写，以分号结尾。
+    2. 可使用空格和缩进来增强语句的可读性。
+    3. MySQL 数据库的 SQL 语句不区分大小写，关键字建议使用大写。
+    4. 3 种注释
+        * 单行注释: -- 注释内容 或 # 注释内容(mysql 特有) 
+        * 多行注释: /* 注释 */
+    
+3. SQL分类
+    1) DDL(Data Definition Language)数据定义语言
+        用来定义数据库对象：数据库，表，列等。关键字：create, drop,alter 等
+    2) DML(Data Manipulation Language)数据操作语言
+        用来对数据库中表的数据进行增删改。关键字：insert, delete, update 等
+    3) DQL(Data Query Language)数据查询语言
+        用来查询数据库中表的记录(数据)。关键字：select, where 等
+    4) DCL(Data Control Language)数据控制语言(了解)
+        用来定义数据库的访问权限和安全级别，及创建用户。关键字：GRANT， REVOKE 等
+</code></pre>
+<h2 id="DDL-操作数据库、表"><a href="#DDL-操作数据库、表" class="headerlink" title="DDL:操作数据库、表"></a>DDL:操作数据库、表</h2><pre><code>1. 操作数据库：CRUD
+    1. C(Create):创建
+        * 创建数据库：
+            * create database 数据库名称;
+        * 创建数据库，判断不存在，再创建：
+            * create database if not exists 数据库名称;
+        * 创建数据库，并指定字符集
+            * create database 数据库名称 character set 字符集名;
+
+        * 练习： 创建db4数据库，判断是否存在，并制定字符集为gbk
+            * create database if not exists db4 character set gbk;
+    2. R(Retrieve)：查询
+        * 查询所有数据库的名称:
+            * show databases;
+        * 查询某个数据库的字符集:查询某个数据库的创建语句
+            * show create database 数据库名称;
+    3. U(Update):修改
+        * 修改数据库的字符集
+            * alter database 数据库名称 character set 字符集名称;
+    4. D(Delete):删除
+        * 删除数据库
+            * drop database 数据库名称;
+        * 判断数据库存在，存在再删除
+            * drop database if exists 数据库名称;
+    5. 使用数据库
+        * 查询当前正在使用的数据库名称
+            * select database();
+        * 使用数据库
+            * use 数据库名称;
+
+
+2. 操作表
+    1. C(Create):创建
+        1. 语法：
+            create table 表名(
+                列名1 数据类型1,
+                列名2 数据类型2,
+                ....
+                列名n 数据类型n
+            );
+            * 注意：最后一列，不需要加逗号（,）
+            * 数据库类型：
+                1. int：整数类型
+                    * age int,
+                2. double:小数类型
+                    * score double(5,2)
+                3. date:日期，只包含年月日，yyyy-MM-dd
+                4. datetime:日期，包含年月日时分秒     yyyy-MM-dd HH:mm:ss
+                5. timestamp:时间错类型    包含年月日时分秒     yyyy-MM-dd HH:mm:ss    
+                    * 如果将来不给这个字段赋值，或赋值为null，则默认使用当前的系统时间，来自动赋值
+
+                6. varchar：字符串
+                    * name varchar(20):姓名最大20个字符
+                    * zhangsan 8个字符  张三 2个字符
+
+
+        * 创建表
+            create table student(
+                id int,
+                name varchar(32),
+                age int ,
+                score double(4,1),
+                birthday date,
+                insert_time timestamp
+            );
+        * 复制表：
+            * create table 表名 like 被复制的表名;          
+    2. R(Retrieve)：查询
+        * 查询某个数据库中所有的表名称
+            * show tables;
+        * 查询表结构
+            * desc 表名;
+    3. U(Update):修改
+        1. 修改表名
+            alter table 表名 rename to 新的表名;
+        2. 修改表的字符集
+            alter table 表名 character set 字符集名称;
+        3. 添加一列
+            alter table 表名 add 列名 数据类型;
+        4. 修改列名称 类型
+            alter table 表名 change 列名 新列别 新数据类型;
+            alter table 表名 modify 列名 新数据类型;
+        5. 删除列
+            alter table 表名 drop 列名;
+    4. D(Delete):删除
+        * drop table 表名;
+        * drop table  if exists 表名 ;
+</code></pre>
+<ul>
+<li>客户端图形化工具：SQLYog</li>
+</ul>
+<h2 id="DML：增删改表中数据"><a href="#DML：增删改表中数据" class="headerlink" title="DML：增删改表中数据"></a>DML：增删改表中数据</h2><pre><code>1. 添加数据：
+    * 语法：
+        * insert into 表名(列名1,列名2,...列名n) values(值1,值2,...值n);
+    * 注意：
+        1. 列名和值要一一对应。
+        2. 如果表名后，不定义列名，则默认给所有列添加值
+            insert into 表名 values(值1,值2,...值n);
+        3. 除了数字类型，其他类型需要使用引号(单双都可以)引起来
+2. 删除数据：
+    * 语法：
+        * delete from 表名 [where 条件]
+    * 注意：
+        1. 如果不加条件，则删除表中所有记录。
+        2. 如果要删除所有记录
+            1. delete from 表名; -- 不推荐使用。有多少条记录就会执行多少次删除操作
+            2. TRUNCATE TABLE 表名; -- 推荐使用，效率更高 先删除表，然后再创建一张一样的表。
+3. 修改数据：
+    * 语法：
+        * update 表名 set 列名1 = 值1, 列名2 = 值2,... [where 条件];
+
+    * 注意：
+        1. 如果不加任何条件，则会将表中所有记录全部修改。
+</code></pre>
+<h2 id="DQL：查询表中的记录"><a href="#DQL：查询表中的记录" class="headerlink" title="DQL：查询表中的记录"></a>DQL：查询表中的记录</h2><pre><code>* select * from 表名;
+
+1. 语法：
+    select
+        字段列表
+    from
+        表名列表
+    where
+        条件列表
+    group by
+        分组字段
+    having
+        分组之后的条件
+    order by
+        排序
+    limit
+        分页限定
+
+
+2. 基础查询
+    1. 多个字段的查询
+        select 字段名1，字段名2... from 表名；
+        * 注意：
+            * 如果查询所有字段，则可以使用*来替代字段列表。
+    2. 去除重复：
+        * distinct
+    3. 计算列
+        * 一般可以使用四则运算计算一些列的值。（一般只会进行数值型的计算）
+        * ifnull(表达式1,表达式2)：null参与的运算，计算结果都为null
+            * 表达式1：哪个字段需要判断是否为null
+            * 如果该字段为null后的替换值。
+    4. 起别名：
+        * as：as也可以省略
+
+
+3. 条件查询
+    1. where子句后跟条件
+    2. 运算符
+        * &gt; 、&lt; 、&lt;= 、&gt;= 、= 、&lt;&gt;
+        * BETWEEN...AND  
+        * IN( 集合) 
+        * LIKE：模糊查询
+            * 占位符：
+                * _:单个任意字符
+                * %：多个任意字符
+        * IS NULL  
+        * and  或 &amp;&amp;
+        * or  或 || 
+        * not  或 !
+        
+            -- 查询年龄大于20岁
+
+            SELECT * FROM student WHERE age &gt; 20;
+            
+            SELECT * FROM student WHERE age &gt;= 20;
+            
+            -- 查询年龄等于20岁
+            SELECT * FROM student WHERE age = 20;
+            
+            -- 查询年龄不等于20岁
+            SELECT * FROM student WHERE age != 20;
+            SELECT * FROM student WHERE age &lt;&gt; 20;
+            
+            -- 查询年龄大于等于20 小于等于30
+            
+            SELECT * FROM student WHERE age &gt;= 20 &amp;&amp;  age &lt;=30;
+            SELECT * FROM student WHERE age &gt;= 20 AND  age &lt;=30;
+            SELECT * FROM student WHERE age BETWEEN 20 AND 30;
+            
+            -- 查询年龄22岁，18岁，25岁的信息
+            SELECT * FROM student WHERE age = 22 OR age = 18 OR age = 25
+            SELECT * FROM student WHERE age IN (22,18,25);
+            
+            -- 查询英语成绩为null
+            SELECT * FROM student WHERE english = NULL; -- 不对的。null值不能使用 = （!=） 判断
+            
+            SELECT * FROM student WHERE english IS NULL;
+            
+            -- 查询英语成绩不为null
+            SELECT * FROM student WHERE english  IS NOT NULL;
+
+
+
+            -- 查询姓马的有哪些？ like
+            SELECT * FROM student WHERE NAME LIKE &#39;马%&#39;;
+            -- 查询姓名第二个字是化的人
+            
+            SELECT * FROM student WHERE NAME LIKE &quot;_化%&quot;;
+            
+            -- 查询姓名是3个字的人
+            SELECT * FROM student WHERE NAME LIKE &#39;___&#39;;
+</code></pre>
+<p>​<br>​                – 查询姓名中包含德的人<br>​                SELECT * FROM student WHERE NAME LIKE ‘%德%’;</p>
+<p>​    </p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Jetbrains系列产品重置试用方法</title>
+    <url>/post/Jetbrains-eval-resetter/</url>
+    <content><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><blockquote>
+<p>Jetbrains系列产品一个可以<strong>无限</strong>重置试用的插件</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Jetbrains的产品很多人都知道特别好用，可是他们的产品都是贵的离谱。</p>
+<p>但是Jetbrains有一个很良心的地方，他会允许你试用<code>30</code>天以评估是否你真的需要为它而付费。</p>
+<p>事实上有一款插件可以实现这个功能，你或许可以用它来重置一下试用时间。</p>
+<p>如何安装？</p>
+<h3 id="1-插件市场安装："><a href="#1-插件市场安装：" class="headerlink" title="1. 插件市场安装："></a>1. 插件市场安装：</h3><ul>
+<li>在<code>Settings/Preferences...</code> -&gt; <code>Plugins</code> 内手动添加第三方插件仓库地址：<code>https://plugins.zhile.io</code></li>
+<li>搜索：<code>IDE Eval Reset</code>插件进行安装。如果搜索不到请注意是否做好了上一步？网络是否通畅？</li>
+<li>插件会提示安装成功。</li>
+</ul>
+<h3 id="2-下载安装："><a href="#2-下载安装：" class="headerlink" title="2. 下载安装："></a>2. 下载安装：</h3><ul>
+<li>请到 <a href="https://gitee.com/pengzhile/ide-eval-resetter">仓库地址</a> 获取连接，下载插件的<code>zip</code>包（macOS可能会自动解压，然后把<code>zip</code>包丢进回收站）</li>
+<li>通常可以直接把<code>zip</code>包拖进IDE的窗口来进行插件的安装。如果无法拖动安装，你可以在<code>Settings/Preferences...</code> -&gt; <code>Plugins</code> 里手动安装插件（<code>Install Plugin From Disk...</code>）</li>
+<li>插件会提示安装成功。</li>
+</ul>
+<p>如何使用？</p>
+<p>1.</p>
+<ul>
+<li>如果IDE没有打开项目，在<code>Welcome</code>界面点击菜单：<code>Get Help</code> -&gt; <code>Eval Reset</code></li>
+<li>如果IDE打开了项目，点击菜单：<code>Help</code> -&gt; <code>Eval Reset</code></li>
+</ul>
+<p>2.</p>
+<ul>
+<li>按钮：<code>Reload</code> 用来刷新界面上的显示信息。</li>
+<li>按钮：<code>Reset</code> 点击会询问是否重置试用信息并<strong>重启IDE</strong>。选择<code>Yes</code>则执行重置操作并<strong>重启IDE生效</strong>，选择<code>No</code>则什么也不做。（此为手动重置方式）</li>
+<li>勾选项：<code>Auto reset before per restart</code> 如果勾选了，则自勾选后<strong>每次重启/退出IDE时会自动重置试用信息</strong>，你无需做额外的事情。（此为自动重置方式）</li>
+</ul>
+<p>如何更新？</p>
+<ul>
+<li>点击IDE的<code>Check for Updates...</code> 菜单手动检测IDE和所安装插件的更新。如果本插件有更新，你会收到提示看到更新日志，自行选择是否更新。</li>
+</ul>
+<h2 id="支持的产品"><a href="#支持的产品" class="headerlink" title="支持的产品"></a>支持的产品</h2><ul>
+<li><strong>IntelliJ IDEA</strong></li>
+<li><strong>AppCode</strong></li>
+<li><strong>CLion</strong></li>
+<li><strong>DataGrip</strong></li>
+<li><strong>GoLand</strong></li>
+<li><strong>PhpStorm</strong></li>
+<li><strong>PyCharm</strong></li>
+<li><strong>Rider</strong></li>
+<li><strong>RubyMine</strong></li>
+<li><strong>WebStorm</strong></li>
+</ul>
+<p>详细请看 <a href="https://zhile.io/2020/11/18/jetbrains-eval-reset.html">传送门</a></p>
+]]></content>
+      <categories>
+        <category>Jetbrains</category>
+      </categories>
+      <tags>
+        <tag>Jetbrains</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>力扣做题笔记（2）：一维数组的动态和</title>
+    <url>/post/leetcode-2/</url>
+    <content><![CDATA[<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给你一个数组 <code>nums</code> 。数组「动态和」的计算公式为：<code>runningSum[i] = sum(nums[0]…nums[i])</code> 。</p>
+<p>请返回 <code>nums</code> 的动态和。</p>
+<p>示例 ：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">输入：nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">输出：[<span class="number">1</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">10</span>]</span><br><span class="line">解释：动态和计算过程为 [<span class="number">1</span>, <span class="number">1</span>+<span class="number">2</span>, <span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>, <span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span>] 。</span><br></pre></td></tr></table></figure>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/running-sum-of-1d-array">https://leetcode-cn.com/problems/running-sum-of-1d-array</a></p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>双层for循环，第一个循环出数组的个数，第二个循环出每个数的和。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] runningSum(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] Arrays = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> a = <span class="number">0</span>; a &lt;= (i); a++) &#123;</span><br><span class="line">                sum = sum + nums[a];</span><br><span class="line">                Arrays[i] = sum;</span><br><span class="line">            &#125;</span><br><span class="line">            sum = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Arrays;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>JAVA</tag>
+        <tag>力扣</tag>
+        <tag>做题笔记</tag>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL学习笔记2</title>
+    <url>/post/study_mysql_two/</url>
+    <content><![CDATA[<h1 id="DQL-查询语句"><a href="#DQL-查询语句" class="headerlink" title="DQL:查询语句"></a>DQL:查询语句</h1><pre><code>1. 排序查询
+    * 语法：order by 子句
+        * order by 排序字段1 排序方式1 ，  排序字段2 排序方式2...
+
+    * 排序方式：
+        * ASC：升序，默认的。
+        * DESC：降序。
+
+    * 注意：
+        * 如果有多个排序条件，则当前边的条件值一样时，才会判断第二条件。
+
+
+2. 聚合函数：将一列数据作为一个整体，进行纵向的计算。
+    1. count：计算个数
+        1. 一般选择非空的列：主键
+        2. count(*)
+    2. max：计算最大值
+    3. min：计算最小值
+    4. sum：计算和
+    5. avg：计算平均值
+
+
+    * 注意：聚合函数的计算，排除null值。
+        解决方案：
+            1. 选择不包含非空的列进行计算
+            2. IFNULL函数
+
+3. 分组查询:
+    1. 语法：group by 分组字段；
+    2. 注意：
+        1. 分组之后查询的字段：分组字段、聚合函数
+        2. where 和 having 的区别？
+            1. where 在分组之前进行限定，如果不满足条件，则不参与分组。having在分组之后进行限定，如果不满足结果，则不会被查询出来
+            2. where 后不可以跟聚合函数，having可以进行聚合函数的判断。
+
+        -- 按照性别分组。分别查询男、女同学的平均分
+
+        SELECT sex , AVG(math) FROM student GROUP BY sex;
+        
+        -- 按照性别分组。分别查询男、女同学的平均分,人数
+        
+        SELECT sex , AVG(math),COUNT(id) FROM student GROUP BY sex;
+        
+        --  按照性别分组。分别查询男、女同学的平均分,人数 要求：分数低于70分的人，不参与分组
+        SELECT sex , AVG(math),COUNT(id) FROM student WHERE math &gt; 70 GROUP BY sex;
+        
+        --  按照性别分组。分别查询男、女同学的平均分,人数 要求：分数低于70分的人，不参与分组,分组之后。人数要大于2个人
+        SELECT sex , AVG(math),COUNT(id) FROM student WHERE math &gt; 70 GROUP BY sex HAVING COUNT(id) &gt; 2;
+        
+        SELECT sex , AVG(math),COUNT(id) 人数 FROM student WHERE math &gt; 70 GROUP BY sex HAVING 人数 &gt; 2;
+</code></pre>
+<p>​<br>    4. 分页查询<br>        1. 语法：limit 开始的索引,每页查询的条数;<br>        2. 公式：开始的索引 = （当前的页码 - 1） * 每页显示的条数<br>            – 每页显示3条记录 </p>
+<pre><code>        SELECT * FROM student LIMIT 0,3; -- 第1页
+        
+        SELECT * FROM student LIMIT 3,3; -- 第2页
+        
+        SELECT * FROM student LIMIT 6,3; -- 第3页
+
+    3. limit 是一个MySQL&quot;方言&quot;
+</code></pre>
+<h2 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h2><pre><code>* 概念： 对表中的数据进行限定，保证数据的正确性、有效性和完整性。    
+* 分类：
+    1. 主键约束：primary key
+    2. 非空约束：not null
+    3. 唯一约束：unique
+    4. 外键约束：foreign key
+
+* 非空约束：not null，某一列的值不能为null
+    1. 创建表时添加约束
+        CREATE TABLE stu(
+            id INT,
+            NAME VARCHAR(20) NOT NULL -- name为非空
+        );
+    2. 创建表完后，添加非空约束
+        ALTER TABLE stu MODIFY NAME VARCHAR(20) NOT NULL;
+
+    3. 删除name的非空约束
+        ALTER TABLE stu MODIFY NAME VARCHAR(20);
+
+* 唯一约束：unique，某一列的值不能重复
+    1. 注意：
+        * 唯一约束可以有NULL值，但是只能有一条记录为null
+    2. 在创建表时，添加唯一约束
+        CREATE TABLE stu(
+            id INT,
+            phone_number VARCHAR(20) UNIQUE -- 手机号
+        );
+    3. 删除唯一约束
+        ALTER TABLE stu DROP INDEX phone_number;
+    4. 在表创建完后，添加唯一约束
+        ALTER TABLE stu MODIFY phone_number VARCHAR(20) UNIQUE;
+
+* 主键约束：primary key。
+    1. 注意：
+        1. 含义：非空且唯一
+        2. 一张表只能有一个字段为主键
+        3. 主键就是表中记录的唯一标识
+
+    2. 在创建表时，添加主键约束
+        create table stu(
+            id int primary key,-- 给id添加主键约束
+            name varchar(20)
+        );
+
+    3. 删除主键
+        -- 错误 alter table stu modify id int ;
+        ALTER TABLE stu DROP PRIMARY KEY;
+
+    4. 创建完表后，添加主键
+        ALTER TABLE stu MODIFY id INT PRIMARY KEY;
+
+    5. 自动增长：
+        1.  概念：如果某一列是数值类型的，使用 auto_increment 可以来完成值得自动增长
+
+        2. 在创建表时，添加主键约束，并且完成主键自增长
+        create table stu(
+            id int primary key auto_increment,-- 给id添加主键约束
+            name varchar(20)
+        );
+</code></pre>
+<p>​<br>            3. 删除自动增长<br>            ALTER TABLE stu MODIFY id INT;<br>            4. 添加自动增长<br>            ALTER TABLE stu MODIFY id INT AUTO_INCREMENT;</p>
+<pre><code>* 外键约束：foreign key,让表于表产生关系，从而保证数据的正确性。
+    1. 在创建表时，可以添加外键
+        * 语法：
+            create table 表名(
+                ....
+                外键列
+                constraint 外键名称 foreign key (外键列名称) references 主表名称(主表列名称)
+            );
+
+    2. 删除外键
+        ALTER TABLE 表名 DROP FOREIGN KEY 外键名称;
+
+    3. 创建表之后，添加外键
+        ALTER TABLE 表名 ADD CONSTRAINT 外键名称 FOREIGN KEY (外键字段名称) REFERENCES 主表名称(主表列名称);
+</code></pre>
+<p>​<br>        4. 级联操作<br>            1. 添加级联操作<br>                语法：ALTER TABLE 表名 ADD CONSTRAINT 外键名称<br>                        FOREIGN KEY (外键字段名称) REFERENCES 主表名称(主表列名称) ON UPDATE CASCADE ON DELETE CASCADE  ;<br>            2. 分类：<br>                1. 级联更新：ON UPDATE CASCADE<br>                2. 级联删除：ON DELETE CASCADE </p>
+<h2 id="数据库的设计"><a href="#数据库的设计" class="headerlink" title="数据库的设计"></a>数据库的设计</h2><pre><code>1. 多表之间的关系
+    1. 分类：
+        1. 一对一(了解)：
+            * 如：人和身份证
+            * 分析：一个人只有一个身份证，一个身份证只能对应一个人
+        2. 一对多(多对一)：
+            * 如：部门和员工
+            * 分析：一个部门有多个员工，一个员工只能对应一个部门
+        3. 多对多：
+            * 如：学生和课程
+            * 分析：一个学生可以选择很多门课程，一个课程也可以被很多学生选择
+    2. 实现关系：
+        1. 一对多(多对一)：
+            * 如：部门和员工
+            * 实现方式：在多的一方建立外键，指向一的一方的主键。
+        2. 多对多：
+            * 如：学生和课程
+            * 实现方式：多对多关系实现需要借助第三张中间表。中间表至少包含两个字段，这两个字段作为第三张表的外键，分别指向两张表的主键
+        3. 一对一(了解)：
+            * 如：人和身份证
+            * 实现方式：一对一关系实现，可以在任意一方添加唯一外键指向另一方的主键。
+
+    3. 案例
+        -- 创建旅游线路分类表 tab_category
+        -- cid 旅游线路分类主键，自动增长
+        -- cname 旅游线路分类名称非空，唯一，字符串 100
+        CREATE TABLE tab_category (
+            cid INT PRIMARY KEY AUTO_INCREMENT,
+            cname VARCHAR(100) NOT NULL UNIQUE
+        );
+        
+        -- 创建旅游线路表 tab_route
+        /*
+        rid 旅游线路主键，自动增长
+        rname 旅游线路名称非空，唯一，字符串 100
+        price 价格
+        rdate 上架时间，日期类型
+        cid 外键，所属分类
+        */
+        CREATE TABLE tab_route(
+            rid INT PRIMARY KEY AUTO_INCREMENT,
+            rname VARCHAR(100) NOT NULL UNIQUE,
+            price DOUBLE,
+            rdate DATE,
+            cid INT,
+            FOREIGN KEY (cid) REFERENCES tab_category(cid)
+        );
+        
+        /*创建用户表 tab_user
+        uid 用户主键，自增长
+        username 用户名长度 100，唯一，非空
+        password 密码长度 30，非空
+        name 真实姓名长度 100
+        birthday 生日
+        sex 性别，定长字符串 1
+        telephone 手机号，字符串 11
+        email 邮箱，字符串长度 100
+        */
+        CREATE TABLE tab_user (
+            uid INT PRIMARY KEY AUTO_INCREMENT,
+            username VARCHAR(100) UNIQUE NOT NULL,
+            PASSWORD VARCHAR(30) NOT NULL,
+            NAME VARCHAR(100),
+            birthday DATE,
+            sex CHAR(1) DEFAULT &#39;男&#39;,
+            telephone VARCHAR(11),
+            email VARCHAR(100)
+        );
+        
+        /*
+        创建收藏表 tab_favorite
+        rid 旅游线路 id，外键
+        date 收藏时间
+        uid 用户 id，外键
+        rid 和 uid 不能重复，设置复合主键，同一个用户不能收藏同一个线路两次
+        */
+        CREATE TABLE tab_favorite (
+            rid INT, -- 线路id
+            DATE DATETIME,
+            uid INT, -- 用户id
+            -- 创建复合主键
+            PRIMARY KEY(rid,uid), -- 联合主键
+            FOREIGN KEY (rid) REFERENCES tab_route(rid),
+            FOREIGN KEY(uid) REFERENCES tab_user(uid)
+        );
+</code></pre>
+<p>​<br>    2. 数据库设计的范式<br>        * 概念：设计数据库时，需要遵循的一些规范。要遵循后边的范式要求，必须先遵循前边的所有范式要求</p>
+<pre><code>        设计关系数据库时，遵从不同的规范要求，设计出合理的关系型数据库，这些不同的规范要求被称为不同的范式，各种范式呈递次规范，越高的范式数据库冗余越小。
+        目前关系数据库有六种范式：第一范式（1NF）、第二范式（2NF）、第三范式（3NF）、巴斯-科德范式（BCNF）、第四范式(4NF）和第五范式（5NF，又称完美范式）。
+
+    * 分类：
+        1. 第一范式（1NF）：每一列都是不可分割的原子数据项
+        2. 第二范式（2NF）：在1NF的基础上，非码属性必须完全依赖于码（在1NF基础上消除非主属性对主码的部分函数依赖）
+            * 几个概念：
+                1. 函数依赖：A--&gt;B,如果通过A属性(属性组)的值，可以确定唯一B属性的值。则称B依赖于A
+                    例如：学号--&gt;姓名。  （学号，课程名称） --&gt; 分数
+                2. 完全函数依赖：A--&gt;B， 如果A是一个属性组，则B属性值得确定需要依赖于A属性组中所有的属性值。
+                    例如：（学号，课程名称） --&gt; 分数
+                3. 部分函数依赖：A--&gt;B， 如果A是一个属性组，则B属性值得确定只需要依赖于A属性组中某一些值即可。
+                    例如：（学号，课程名称） -- &gt; 姓名
+                4. 传递函数依赖：A--&gt;B, B -- &gt;C . 如果通过A属性(属性组)的值，可以确定唯一B属性的值，在通过B属性（属性组）的值可以确定唯一C属性的值，则称 C 传递函数依赖于A
+                    例如：学号--&gt;系名，系名--&gt;系主任
+                5. 码：如果在一张表中，一个属性或属性组，被其他所有属性所完全依赖，则称这个属性(属性组)为该表的码
+                    例如：该表中码为：（学号，课程名称）
+                    * 主属性：码属性组中的所有属性
+                    * 非主属性：除过码属性组的属性
+                    
+        3. 第三范式（3NF）：在2NF基础上，任何非主属性不依赖于其它非主属性（在2NF基础上消除传递依赖）
+</code></pre>
+<h2 id="数据库的备份和还原"><a href="#数据库的备份和还原" class="headerlink" title="数据库的备份和还原"></a>数据库的备份和还原</h2><pre><code>1. 命令行：
+    * 语法：
+        * 备份： mysqldump -u用户名 -p密码 数据库名称 &gt; 保存的路径
+        * 还原：
+            1. 登录数据库
+            2. 创建数据库
+            3. 使用数据库
+            4. 执行文件。source 文件路径
+</code></pre>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JQuery 笔记（一）</title>
+    <url>/post/study_jquery_one/</url>
+    <content><![CDATA[<h2 id="JQuery-基础："><a href="#JQuery-基础：" class="headerlink" title="JQuery 基础："></a>JQuery 基础：</h2><pre><code>1. 概念： 一个JavaScript框架。简化JS开发
+    * jQuery是一个快速、简洁的JavaScript框架，是继Prototype之后又一个优秀的JavaScript代码库（或JavaScript框架）。jQuery设计的宗旨    是“write Less，Do More”，即倡导写更少的代码，做更多的事情。它封装JavaScript常用的功能代码，提供一种简便的JavaScript设计模式，优    化HTML文档操作、事件处理、动画设计和Ajax交互。
+
+    * JavaScript框架：本质上就是一些js文件，封装了js的原生代码而已
+
+
+3. JQuery对象和JS对象区别与转换
+    1. JQuery对象在操作时，更加方便。
+    2. JQuery对象和js对象方法不通用的.
+    3. 两者相互转换
+        * jq -- &gt; js : jq对象[索引] 或者 jq对象.get(索引)
+        * js -- &gt; jq : $(js对象)
+
+
+4. 选择器：筛选具有相似特征的元素(标签)
+
+    1. 基本操作学习：
+        1. 事件绑定
+            //1.获取b1按钮
+            $(&quot;#b1&quot;).click(function()&#123;
+                alert(&quot;abc&quot;);
+            &#125;);
+        2. 入口函数
+             $(function () &#123;
+               
+                &#125;);
+             window.onload  和 $(function) 区别
+                 * window.onload 只能定义一次,如果定义多次，后边的会将前边的覆盖掉
+                 * $(function)可以定义多次的。
+        3. 样式控制：css方法
+             // $(&quot;#div1&quot;).css(&quot;background-color&quot;,&quot;red&quot;);
+              $(&quot;#div1&quot;).css(&quot;backgroundColor&quot;,&quot;pink&quot;);
+
+
+    2. 分类
+        1. 基本选择器
+            1. 标签选择器（元素选择器）
+                * 语法： $(&quot;html标签名&quot;) 获得所有匹配标签名称的元素
+            2. id选择器 
+                * 语法： $(&quot;#id的属性值&quot;) 获得与指定id属性值匹配的元素
+            3. 类选择器
+                * 语法： $(&quot;.class的属性值&quot;) 获得与指定的class属性值匹配的元素
+            4. 并集选择器：
+                * 语法： $(&quot;选择器1,选择器2....&quot;) 获取多个选择器选中的所有元素
+        2. 层级选择器
+            1. 后代选择器
+                * 语法： $(&quot;A B &quot;) 选择A元素内部的所有B元素        
+            2. 子选择器
+                * 语法： $(&quot;A &gt; B&quot;) 选择A元素内部的所有B子元素
+        3. 属性选择器
+            1. 属性名称选择器 
+                * 语法： $(&quot;A[属性名]&quot;) 包含指定属性的选择器
+            2. 属性选择器
+                * 语法： $(&quot;A[属性名=&#39;值&#39;]&quot;) 包含指定属性等于指定值的选择器
+            3. 复合属性选择器
+                * 语法： $(&quot;A[属性名=&#39;值&#39;][]...&quot;) 包含多个属性条件的选择器
+        4. 过滤选择器
+            1. 首元素选择器 
+                * 语法： :first 获得选择的元素中的第一个元素
+            2. 尾元素选择器 
+                * 语法： :last 获得选择的元素中的最后一个元素
+            3. 非元素选择器
+                * 语法： :not(selector) 不包括指定内容的元素
+            4. 偶数选择器
+                * 语法： :even 偶数，从 0 开始计数
+            5. 奇数选择器
+                * 语法： :odd 奇数，从 0 开始计数
+            6. 等于索引选择器
+                * 语法： :eq(index) 指定索引元素
+            7. 大于索引选择器 
+                * 语法： :gt(index) 大于指定索引元素
+            8. 小于索引选择器 
+                * 语法： :lt(index) 小于指定索引元素
+            9. 标题选择器
+                * 语法： :header 获得标题（h1~h6）元素，固定写法
+        5. 表单过滤选择器
+            1. 可用元素选择器 
+                * 语法： :enabled 获得可用元素
+            2. 不可用元素选择器 
+                * 语法： :disabled 获得不可用元素
+            3. 选中选择器 
+                * 语法： :checked 获得单选/复选框选中的元素
+            4. 选中选择器 
+                * 语法： :selected 获得下拉框选中的元素
+
+5. DOM操作
+    1. 内容操作
+        1. html(): 获取/设置元素的标签体内容   &lt;a&gt;&lt;font&gt;内容&lt;/font&gt;&lt;/a&gt;  --&gt; &lt;font&gt;内容&lt;/font&gt;
+        2. text(): 获取/设置元素的标签体纯文本内容   &lt;a&gt;&lt;font&gt;内容&lt;/font&gt;&lt;/a&gt; --&gt; 内容
+        3. val()： 获取/设置元素的value属性值
+    2. 属性操作
+        1. 通用属性操作
+            1. attr(): 获取/设置元素的属性
+            2. removeAttr():删除属性
+            3. prop():获取/设置元素的属性
+            4. removeProp():删除属性
+
+            * attr和prop区别？
+                1. 如果操作的是元素的固有属性，则建议使用prop
+                2. 如果操作的是元素自定义的属性，则建议使用attr
+        2. 对class属性操作
+            1. addClass():添加class属性值
+            2. removeClass():删除class属性值
+            3. toggleClass():切换class属性
+                * toggleClass(&quot;one&quot;): 
+                    * 判断如果元素对象上存在class=&quot;one&quot;，则将属性值one删除掉。  如果元素对象上不存在class=&quot;one&quot;，则添加
+            4. css():
+    3. CRUD操作:
+        1. append():父元素将子元素追加到末尾
+            * 对象1.append(对象2): 将对象2添加到对象1元素内部，并且在末尾
+        2. prepend():父元素将子元素追加到开头
+            * 对象1.prepend(对象2):将对象2添加到对象1元素内部，并且在开头
+        3. appendTo():
+            * 对象1.appendTo(对象2):将对象1添加到对象2内部，并且在末尾
+        4. prependTo()：
+            * 对象1.prependTo(对象2):将对象1添加到对象2内部，并且在开头
+
+
+        5. after():添加元素到元素后边
+            * 对象1.after(对象2)： 将对象2添加到对象1后边。对象1和对象2是兄弟关系
+        6. before():添加元素到元素前边
+            * 对象1.before(对象2)： 将对象2添加到对象1前边。对象1和对象2是兄弟关系
+        7. insertAfter()
+            * 对象1.insertAfter(对象2)：将对象2添加到对象1后边。对象1和对象2是兄弟关系
+        8. insertBefore()
+            * 对象1.insertBefore(对象2)： 将对象2添加到对象1前边。对象1和对象2是兄弟关系
+
+        9. remove():移除元素
+            * 对象.remove():将对象删除掉
+        10. empty():清空元素的所有后代元素。
+            * 对象.empty():将对象的后代元素全部清空，但是保留当前对象以及其属性节点
+</code></pre>
+]]></content>
+      <categories>
+        <category>jQuery</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>jQuery</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JQuery 笔记（二）</title>
+    <url>/post/study_jquery_two/</url>
+    <content><![CDATA[<h2 id="JQuery-高级"><a href="#JQuery-高级" class="headerlink" title="JQuery 高级"></a>JQuery 高级</h2><pre><code>1. 动画
+    1. 三种方式显示和隐藏元素
+        1. 默认显示和隐藏方式
+            1. show([speed,[easing],[fn]])
+                1. 参数：
+                    1. speed：动画的速度。三个预定义的值(&quot;slow&quot;,&quot;normal&quot;, &quot;fast&quot;)或表示动画时长的毫秒数值(如：1000)
+                    2. easing：用来指定切换效果，默认是&quot;swing&quot;，可用参数&quot;linear&quot;
+                        * swing：动画执行时效果是 先慢，中间快，最后又慢
+                        * linear：动画执行时速度是匀速的
+                    3. fn：在动画完成时执行的函数，每个元素执行一次。
+
+            2. hide([speed,[easing],[fn]])
+            3. toggle([speed],[easing],[fn])
+        
+        2. 滑动显示和隐藏方式
+            1. slideDown([speed],[easing],[fn])
+            2. slideUp([speed,[easing],[fn]])
+            3. slideToggle([speed],[easing],[fn])
+
+        3. 淡入淡出显示和隐藏方式
+            1. fadeIn([speed],[easing],[fn])
+            2. fadeOut([speed],[easing],[fn])
+            3. fadeToggle([speed,[easing],[fn]])
+
+2. 遍历
+    1. js的遍历方式
+        * for(初始化值;循环结束条件;步长)
+    2. jq的遍历方式
+        1. jq对象.each(callback)
+            1. 语法：
+                jquery对象.each(function(index,element)&#123;&#125;);
+                    * index:就是元素在集合中的索引
+                    * element：就是集合中的每一个元素对象
+
+                    * this：集合中的每一个元素对象
+            2. 回调函数返回值：
+                * true:如果当前function返回为false，则结束循环(break)。
+                * false:如果当前function返回为true，则结束本次循环，继续下次循环(continue)
+        2. $.each(object, [callback])
+        3. for..of: jquery 3.0 版本之后提供的方式
+            for(元素对象 of 容器对象)
+    
+3. 事件绑定
+    1. jquery标准的绑定方式
+        * jq对象.事件方法(回调函数)；
+        * 注：如果调用事件方法，不传递回调函数，则会触发浏览器默认行为。
+            * 表单对象.submit();//让表单提交
+    2. on绑定事件/off解除绑定
+        * jq对象.on(&quot;事件名称&quot;,回调函数)
+        * jq对象.off(&quot;事件名称&quot;)
+            * 如果off方法不传递任何参数，则将组件上的所有事件全部解绑
+    3. 事件切换：toggle
+        * jq对象.toggle(fn1,fn2...)
+            * 当单击jq对象对应的组件后，会执行fn1.第二次点击会执行fn2.....
+            
+        * 注意：1.9版本 .toggle() 方法删除,jQuery Migrate（迁移）插件可以恢复此功能。
+             &lt;script src=&quot;../js/jquery-migrate-1.0.0.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+
+4. 案例
+    1. 广告显示和隐藏
+    <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>广告的自动显示与隐藏<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></span><br><span class="line"><span class="css">        <span class="selector-id">#content</span> &#123;</span></span><br><span class="line"><span class="css">            <span class="attribute">width</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="css">            <span class="attribute">height</span>: <span class="number">500px</span>;</span></span><br><span class="line"><span class="css">            <span class="attribute">background</span>: <span class="number">#999</span></span></span><br><span class="line"><span class="css">        &#125;</span></span><br><span class="line"><span class="css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--引入jquery--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;../js/jquery-3.3.1.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="comment">/*</span></span></span><br><span class="line"><span class="comment"><span class="javascript">            需求：</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                1. 当页面加载完，3秒后。自动显示广告</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                2. 广告显示5秒后，自动消失。</span></span></span><br><span class="line"><span class="comment"><span class="javascript"></span></span></span><br><span class="line"><span class="comment"><span class="javascript">            分析：</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                1. 使用定时器来完成。setTimeout (执行一次定时器)</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                2. 分析发现JQuery的显示和隐藏动画效果其实就是控制display</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                3. 使用  show/hide方法来完成广告的显示</span></span></span><br><span class="line"><span class="comment"><span class="javascript">         */</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="comment">//入口函数，在页面加载完成之后，定义定时器，调用这两个方法</span></span></span><br><span class="line"><span class="javascript">        $(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="comment">//定义定时器，调用adShow方法 3秒后执行一次</span></span></span><br><span class="line"><span class="javascript">            <span class="built_in">setTimeout</span>(adShow, <span class="number">3000</span>);</span></span><br><span class="line"><span class="javascript">            <span class="comment">//定义定时器，调用adHide方法，8秒后执行一次</span></span></span><br><span class="line"><span class="javascript">            <span class="built_in">setTimeout</span>(adHide, <span class="number">8000</span>);</span></span><br><span class="line"><span class="javascript">        &#125;);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="comment">//显示广告</span></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">adShow</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="comment">//获取广告div，调用显示方法</span></span></span><br><span class="line"><span class="javascript">            $(<span class="string">&quot;#ad&quot;</span>).show(<span class="string">&quot;slow&quot;</span>);</span></span><br><span class="line"><span class="javascript">        &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="comment">//隐藏广告</span></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">adHide</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="comment">//获取广告div，调用隐藏方法</span></span></span><br><span class="line"><span class="javascript">            $(<span class="string">&quot;#ad&quot;</span>).hide(<span class="string">&quot;slow&quot;</span>);</span></span><br><span class="line"><span class="javascript">        &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 广告DIV --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;ad&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">style</span>=<span class="string">&quot;width:100%&quot;</span> <span class="attr">src</span>=<span class="string">&quot;../img/adv.jpg&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 下方正文部分 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">    正文部分</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+    2. 抽奖
+    <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>jquery案例之抽奖<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;../js/jquery-3.3.1.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">language</span>=<span class="string">&#x27;javascript&#x27;</span> <span class="attr">type</span>=<span class="string">&#x27;text/javascript&#x27;</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="comment">/*</span></span></span><br><span class="line"><span class="comment"><span class="javascript">            分析：</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                1. 给开始按钮绑定单击事件</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                    1.1 定义循环定时器</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                    1.2 切换小相框的src属性</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                        * 定义数组，存放图片资源路径</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                        * 生成随机数。数组索引</span></span></span><br><span class="line"><span class="comment"><span class="javascript"></span></span></span><br><span class="line"><span class="comment"><span class="javascript"></span></span></span><br><span class="line"><span class="comment"><span class="javascript">                2. 给结束按钮绑定单击事件</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                    1.1 停止定时器</span></span></span><br><span class="line"><span class="comment"><span class="javascript">                    1.2 给大相框设置src属性</span></span></span><br><span class="line"><span class="comment"><span class="javascript"></span></span></span><br><span class="line"><span class="comment"><span class="javascript">         */</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> imgs = [<span class="string">&quot;../img/man00.jpg&quot;</span>,</span></span><br><span class="line"><span class="javascript">                    <span class="string">&quot;../img/man01.jpg&quot;</span>,</span></span><br><span class="line"><span class="javascript">                    <span class="string">&quot;../img/man02.jpg&quot;</span>,</span></span><br><span class="line"><span class="javascript">                    <span class="string">&quot;../img/man03.jpg&quot;</span>,</span></span><br><span class="line"><span class="javascript">                    <span class="string">&quot;../img/man04.jpg&quot;</span>,</span></span><br><span class="line"><span class="javascript">                    <span class="string">&quot;../img/man05.jpg&quot;</span>,</span></span><br><span class="line"><span class="javascript">                    <span class="string">&quot;../img/man06.jpg&quot;</span>,</span></span><br><span class="line"><span class="javascript">                    ];</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> startId;<span class="comment">//开始定时器的id</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> index;<span class="comment">//随机角标</span></span></span><br><span class="line"><span class="javascript">        $(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="comment">//处理按钮是否可以使用的效果</span></span></span><br><span class="line"><span class="javascript">            $(<span class="string">&quot;#startID&quot;</span>).prop(<span class="string">&quot;disabled&quot;</span>,<span class="literal">false</span>);</span></span><br><span class="line"><span class="javascript">            $(<span class="string">&quot;#stopID&quot;</span>).prop(<span class="string">&quot;disabled&quot;</span>,<span class="literal">true</span>);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">           <span class="comment">//1. 给开始按钮绑定单击事件</span></span></span><br><span class="line"><span class="javascript">            $(<span class="string">&quot;#startID&quot;</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="comment">// 1.1 定义循环定时器 20毫秒执行一次</span></span></span><br><span class="line"><span class="javascript">                startId = <span class="built_in">setInterval</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                    <span class="comment">//处理按钮是否可以使用的效果</span></span></span><br><span class="line"><span class="javascript">                    $(<span class="string">&quot;#startID&quot;</span>).prop(<span class="string">&quot;disabled&quot;</span>,<span class="literal">true</span>);</span></span><br><span class="line"><span class="javascript">                    $(<span class="string">&quot;#stopID&quot;</span>).prop(<span class="string">&quot;disabled&quot;</span>,<span class="literal">false</span>);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">                    <span class="comment">//1.2生成随机角标 0-6</span></span></span><br><span class="line"><span class="javascript">                    index = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">7</span>);<span class="comment">//0.000--0.999 --&gt; * 7 --&gt; 0.0-----6.9999</span></span></span><br><span class="line"><span class="javascript">                    <span class="comment">//1.3设置小相框的src属性</span></span></span><br><span class="line"><span class="javascript">                    $(<span class="string">&quot;#img1ID&quot;</span>).prop(<span class="string">&quot;src&quot;</span>,imgs[index]);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">                &#125;,<span class="number">20</span>);</span></span><br><span class="line"><span class="javascript">            &#125;);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">            <span class="comment">//2. 给结束按钮绑定单击事件</span></span></span><br><span class="line"><span class="javascript">            $(<span class="string">&quot;#stopID&quot;</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="comment">//处理按钮是否可以使用的效果</span></span></span><br><span class="line"><span class="javascript">                $(<span class="string">&quot;#startID&quot;</span>).prop(<span class="string">&quot;disabled&quot;</span>,<span class="literal">false</span>);</span></span><br><span class="line"><span class="javascript">                $(<span class="string">&quot;#stopID&quot;</span>).prop(<span class="string">&quot;disabled&quot;</span>,<span class="literal">true</span>);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">               <span class="comment">// 1.1 停止定时器</span></span></span><br><span class="line"><span class="javascript">                <span class="built_in">clearInterval</span>(startId);</span></span><br><span class="line"><span class="javascript">               <span class="comment">// 1.2 给大相框设置src属性</span></span></span><br><span class="line"><span class="javascript">                $(<span class="string">&quot;#img2ID&quot;</span>).prop(<span class="string">&quot;src&quot;</span>,imgs[index]).hide();</span></span><br><span class="line"><span class="javascript">                <span class="comment">//显示1秒之后</span></span></span><br><span class="line"><span class="javascript">                $(<span class="string">&quot;#img2ID&quot;</span>).show(<span class="number">1000</span>);</span></span><br><span class="line"><span class="javascript">            &#125;);</span></span><br><span class="line"><span class="javascript">        &#125;);</span></span><br><span class="line"><span class="javascript">          </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 小像框 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;border-style:dotted;width:160px;height:100px&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;img1ID&quot;</span> <span class="attr">src</span>=<span class="string">&quot;../img/man00.jpg&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width:160px;height:100px&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 大像框 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span></span></span><br><span class="line"><span class="tag">        <span class="attr">style</span>=<span class="string">&quot;border-style:double;width:800px;height:500px;position:absolute;left:500px;top:10px&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;img2ID&quot;</span> <span class="attr">src</span>=<span class="string">&quot;../img/man00.jpg&quot;</span> <span class="attr">width</span>=<span class="string">&quot;800px&quot;</span> <span class="attr">height</span>=<span class="string">&quot;500px&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 开始按钮 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">&quot;startID&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">&quot;button&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">value</span>=<span class="string">&quot;点击开始&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">style</span>=<span class="string">&quot;width:150px;height:150px;font-size:22px&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 停止按钮 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">&quot;stopID&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">&quot;button&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">value</span>=<span class="string">&quot;点击停止&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">style</span>=<span class="string">&quot;width:150px;height:150px;font-size:22px&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+5. 插件：增强JQuery的功能
+    1. 实现方式：
+        1. $.fn.extend(object) 
+            * 增强通过Jquery获取的对象的功能  $(&quot;#id&quot;)
+        2. $.extend(object)
+            * 增强JQeury对象自身的功能  $/jQuery
+</code></pre>
+]]></content>
+      <categories>
+        <category>jQuery</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>jQuery</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>小姐姐系列</title>
+    <url>/post/xiaojiejie/</url>
+    <content><![CDATA[<style type="text/css">
+    .s1 {
+        text-align: center;
+        box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+        width: 115px;
+        height: 24px;
+        color: #000000;
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        display: inline-block;
+        margin: 10px 10px;
+    }
+
+    .s2 {
+        text-align: center;
+        box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+        width: 115px;
+        color: #FFFFFF;
+        background-color: #409eff;
+        border-radius: 5px;
+        display: inline-block;
+    }
+    #text{
+            width: 220px;
+            height: 30px;
+            color: #fff;
+            background-color: #409eff;
+            font-weight: 500;
+            box-shadow: 2px 5px 10px rgba(49,58,70,0.15);
+            padding: 0 12px;
+            border-radius: 2px 2px 2px 0;
+            text-align: center;
+            line-height: 30px;
+        }
+    #box{
+        margin-top: 30px;
+        background-color: #f2f6fc;
+    }
+</style>
+<div>
+    <iframe id="xjjvideo"
+        src="https://bfq.bugjava.cn/player/?url=https://android.bugjava.online/video.php"
+        allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen"
+        msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
+        webkitallowfullscreen="webkitallowfullscreen" width="100%" height="550px" frameborder="0">
+    </iframe>
+</div>
+<div id="box">
+    <p id="text">播放列表</p>
+    <hr >
+</div>
+<script src="/js/video.js"></script>
+
+
+
+<h1 id="精选小姐姐系列-持续更新页"><a href="#精选小姐姐系列-持续更新页" class="headerlink" title="精选小姐姐系列(持续更新页)"></a>精选小姐姐系列(持续更新页)</h1>]]></content>
+      <categories>
+        <category>娱乐</category>
+      </categories>
+      <tags>
+        <tag>小姐姐</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用宝塔安装UnblockNeteaseMusic</title>
+    <url>/post/UnblockNeteaseMusic/</url>
+    <content><![CDATA[<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><blockquote>
+<p>UnblockNeteaseMusic是一款可以给你解除网易云音乐海外限制并解锁变灰(无版权)歌曲的工具，让你可以听取客户端任何的歌曲，而不受到限制，此前该类似工具挺多的，不过貌似都不维护或者失效了，这里提到的项目更新很频繁，支持Windows、MacOS、安卓、IOS等设备，所以就分享一下使用方法。</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h1><p><img src="/images/UnblockNeteaseMusic(1).png" alt="使用前"><br><img src="/images/UnblockNeteaseMusic(2).png" alt="使用后"></p>
+<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><ul>
+<li>使用网易云旧链/QQ/虾米/百度/酷狗/酷我/咕咪/JOOX音源替换变灰歌曲链接(默认仅启用前四)。</li>
+<li>为请求增加X-Real-IP参数解锁海外限制，支持指定网易云服务器IP，支持设置上游HTTP/HTTPS代理。</li>
+<li>完整的流量代理功能(HTTP/HTTPS)，可直接作为系统代理(同时支持PAC)。</li>
+</ul>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ul>
+<li><strong>github地址</strong>:<a href="https://github.com/acodegod/UnblockNeteaseMusic">https://github.com/acodegod/UnblockNeteaseMusic</a></li>
+</ul>
+<h2 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h2><ul>
+<li><p>推荐5M带宽以上的服务器、VPS都可以（只要能安装宝塔面板）</p>
+</li>
+<li><p>测试服务器：某轻量服务器</p>
+</li>
+<li><p>测试系统：CentOS 7.1</p>
+</li>
+</ul>
+<h2 id="部署方法"><a href="#部署方法" class="headerlink" title="部署方法"></a>部署方法</h2><h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><p>  安装宝塔面板，跳过宝塔面板的推荐安装（用不到）、并且打开软件商店 -&gt; 运行环境 -&gt; 安装PM2管理器<br><img src="/images/music1.png" alt=" "></p>
+<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>  使用宝塔自带的SSH工具或使用Xshell工具连接服务器、并下载待部署项目<br><img src="/images/music2.png" alt=" "><br>  <strong>连接服务器后执行下面的命令行</strong></p>
+<p><strong>代码</strong><code>git clone https://github.com/acodegod/UnblockNeteaseMusic.git</code><br><img src="/images/music3.png" alt=" "></p>
+<h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><p>  在/root/UnblockNeteaseMusic/src/app.js 中找到端口并记录下来（可以改为自己想要的端口）默认端口为8080，如果需要用其他端口，可以直接将8080换成你需要的端口<br><img src="/images/music4.png"></p>
+<h3 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h3><p>在宝塔面板左侧安全中 将刚刚看见的端口放行<em><strong>名称随便填</strong></em>（如果你用了什么端口就放行什么端口）（项目默认8080端口）<br><strong>注意</strong>：部分服务器厂商（例如：阿里云、腾讯云、天翼云等等）会开启安全组，宝塔开放端口后还要去服务器控制面板放行对应端口</p>
+<h3 id="第五步"><a href="#第五步" class="headerlink" title="第五步"></a>第五步</h3><p>   打开刚刚安装的PM2管理器并添加  app.js<br><img src="/images/music5.png" alt=" ">   </p>
+<p><strong>到这里宝塔上就部署完了</strong></p>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><h2 id="PC设置方式"><a href="#PC设置方式" class="headerlink" title="PC设置方式"></a>PC设置方式</h2><ol>
+<li>打开系统地址：C:\Windows\System32\drivers\etc<br>部分Hosts文件因为安全组的原因无法打开或者保存，这种情况还请百度解决，毕竟我一个一个教有点费力<br>修改Hosts文件，向 hosts 文件添加两条规则（不会可以百度，我就不教了）</li>
+</ol>
+<p><strong>上面这步可以跳过，如果下面的设置完了不能用的话再设置这个</strong></p>
+<ol start="2">
+<li>打开网易云客户端设置&gt;工具&gt;自定义代理&gt;HTTPS代理<br>服务器 输入你的服务器ip  端口 输入你开放的端口<br>用户名和密码不用管<br>点击确定，重启网易云</li>
+</ol>
+<h2 id="安卓端设置方法"><a href="#安卓端设置方法" class="headerlink" title="安卓端设置方法"></a>安卓端设置方法</h2><h3 id="安卓端WiFi下"><a href="#安卓端WiFi下" class="headerlink" title="安卓端WiFi下"></a>安卓端WiFi下</h3><p>手机设置 &gt; WLAN &gt; 网络设置 &gt; 高级选项 &gt; 代理<br><em>注意</em>：设置是你连接的那个wifi，一般在你连接的wifi边有一个感叹号，或者长按连接的wifi选择 修改网络<br>选择手动代理，主机名就是你的服务器IP 端口是你开放的端口（默认8080）</p>
+<h3 id="安卓端流量下"><a href="#安卓端流量下" class="headerlink" title="安卓端流量下"></a>安卓端流量下</h3><p>建议配合Xndroid工具，最新版APP下载地址→<a href="https://github.com/XndroidDev/Xndroid/releases">传送门</a>，大致设置如下：<br>打开Xndroid &gt; 点击左侧Fqrouter &gt; 添加个人代理(只需要填服务器ip和端口即可) &gt; 代理列表配置项(将高级设置里面全部关掉) &gt; 软件右上角代理设置(只代理网易云音乐)</p>
+<h3 id="IOS系统使用方法"><a href="#IOS系统使用方法" class="headerlink" title="IOS系统使用方法"></a>IOS系统使用方法</h3><p>IOS使用方法，对于不会设置的是挺复杂的，需要借助Shadowrocket工具。<br><strong>设置方法</strong><br>打开小火箭 &gt; 添加节点(类型选择HTTP，输入你的ip和端口，随便备注下，右上角完成即可) &gt; 编辑配置 &gt; 添加规则(类型选择USER-AGENT，选项选择网易云，用户代理输入NeteaseMusic*)，保存即可。</p>
+<hr>
+<p>设置完成后你还可以在右上角启动设置中，关掉xx-net和fqrouter里面的所有启动项，这样开启软件速度也会快很多。</p>
+<hr>
+<p>最后貌似很多妹子都喜欢用网易云，小伙伴们可以去喜欢的妹子面前装个逼，自己搭建好了，然后教她们点亮下灰色无版权歌曲。</p>
+]]></content>
+      <categories>
+        <category>经验教程</category>
+      </categories>
+      <tags>
+        <tag>教程</tag>
+        <tag>音乐</tag>
+        <tag>宝塔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>利用NodeJs本地部署UnblockNeteaseMusic</title>
+    <url>/post/PCUnblockNeteaseMusic/</url>
+    <content><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><blockquote>
+<p>考虑到部分同学没有服务器，我在网上看见了Windows的一键启动方法，那么本文给大家带来一个一键启动的方法以及设置开启自启的方法。</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="部署安装"><a href="#部署安装" class="headerlink" title="部署安装"></a>部署安装</h1><h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>  安装NodeJS环境 下载地址：<a href="http://nodejs.cn/download/">http://nodejs.cn/download/</a> 根据你的系统选择合适的下载</p>
+<p><strong>备注</strong>：已经安装过的朋友可以跳过这一步。如何查看自己是否安装过？使用Win+R键打开CMD，输入node -v即可，如有返回结果是NodeJs版本号即代表已安装</p>
+<h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p><strong>下载项目文件</strong>（解压到自己想保存的位置）</p>
+<p>下载地址：<a href="https://github.com/acodegod/UnblockNeteaseMusic/archive/master.zip">https://github.com/acodegod/UnblockNeteaseMusic/archive/master.zip</a></p>
+<h2 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h2><p><strong>记录本地IP地址</strong></p>
+<p>使用Win+R键都打开CMD，输入ping music.163.com。并记录Ping出来的IP</p>
+<h2 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h2><p><strong>制作一键启动bat脚本</strong></p>
+<p>新建一个文本文档，把以下三条代码复制进去另存为 music.bat （复制进去后记得修改哦~）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">代码中 端口自定义，IP修改为刚刚记录的IP</span><br><span class="line">@echo off   cd 项目文件解压位置</span><br><span class="line">node app.js -p 准备放行的端口 -f 刚刚Ping出来的IP</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>位置信息:右键下载的文件夹，选择属性<br>端口是自己设置的（我选择的是18080端口）<br>做好的bat脚本放到下载的文件里</p>
+</blockquote>
+<h2 id="第五步"><a href="#第五步" class="headerlink" title="第五步"></a>第五步</h2><p>右击bat文件，点击创建快捷方式，并把快捷方式放到桌面等显眼位置。以后启动即可打开快捷方式即可。</p>
+<p><strong>备注</strong>：如需开机自启请看第六步，无需请直接看第七步<br>打开bat文件如果显示</p>
+<p><strong><code>HTTP Server running @ http://0.0.0.0:18080</code></strong></p>
+<p>就表示成功</p>
+<h2 id="第六步"><a href="#第六步" class="headerlink" title="第六步"></a>第六步</h2><p><strong>设置开机自启</strong></p>
+<p>新建一个文本文档，把以下三条代码复制进去另存为 music.vbs</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">记得修改路径哦，不要无脑复制粘贴</span><br><span class="line">Set ws = CreateObject(&quot;Wscript.Shell&quot;)</span><br><span class="line">ws.run &quot;cmd /c music.bat&quot;,vbhide</span><br></pre></td></tr></table></figure>
+
+<p>将 VBS 脚本放置在项目文件夹中，并创建快捷方式</p>
+<p>将 VBS 创建快捷方式放到自启文件夹（C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp）</p>
+<h2 id="第七步"><a href="#第七步" class="headerlink" title="第七步"></a>第七步</h2><p><strong>客户端设置</strong></p>
+<p>右上角【⚙】 – 【工具】 – 【Http代理】 – 点击【自定义代理】 – 下拉框选择【HTTP代理】</p>
+<p>分别输入 服务器 和 端口 点击怕【确定】即可，会提示要重启客户端，重启即可</p>
+<p>（服务器输入本地IP（一般是127.0.0.1）端口输入你刚刚设置的，我用的是18080端口）</p>
+<hr>
+<p><strong>接下来就可以愉快的听歌了</strong>由于不方便放图所以就没有图片了，不懂的可以加我QQ。</p>
+]]></content>
+      <categories>
+        <category>经验教程</category>
+      </categories>
+      <tags>
+        <tag>教程</tag>
+        <tag>音乐</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用Python爬取王者荣耀英雄皮肤海报图</title>
+    <url>/post/wzryphoto/</url>
+    <content><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><blockquote>
+<p>在某平台公开课上学了怎么用python爬取王者的全英雄皮肤海报图，然后自己敲了一遍，发现还不错，把图片全部都爬取下来了，本来想用来做壁纸，但是一看，实在太丑，然后。。然后就不知道这些图片能干啥了。现在就来分享一些爬取王者海报图的思路。</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>1，确定爬取的url路径</p>
+<p>2，发送请求，一般需要模拟浏览器发送，需要用到 requests</p>
+<p>3，解析数据，需要用json模块，json模块可以把json字符串转换换成Python可交互的数据</p>
+<p>4，保存数据</p>
+<h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>确定爬取的url路径</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#在王者官网打开检查</span><br><span class="line">base_url = &#x27;https://pvp.qq.com/web201605/js/herolist.json&#x27;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p>模拟浏览器发送请求 这里要用到requests 获取响应数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">response = requests.get(base_url)</span><br><span class="line">data_str = response.text  <span class="comment">#--字符串</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h2><p>解析数据，要用到json模块，json模块可以把 json字符串转化成python可交互的数据类型,</p>
+<p>1，转换数据类型</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">data_list = json.loads(data_str) </span><br></pre></td></tr></table></figure>
+
+<p>2,解析数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> data_list:</span><br><span class="line">    <span class="comment"># 提取图片所需参数</span></span><br><span class="line">    ename = data[<span class="string">&#x27;ename&#x27;</span>]  <span class="comment"># 英雄编号</span></span><br><span class="line">    cname = data[<span class="string">&#x27;cname&#x27;</span>]  <span class="comment"># 英雄名字</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        skin_name = data[<span class="string">&#x27;skin_name&#x27;</span>].split(<span class="string">&#x27;|&#x27;</span>)  <span class="comment"># 切割皮肤的名字，用于计算每个英雄有多少个皮肤</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># http://game.gtimg.cn/images/yxzj/img201606/skin/hero-info/524/524-bigskin-1.jpg</span></span><br><span class="line">    <span class="comment">#这是其中一个图片的url</span></span><br><span class="line">    <span class="comment"># http://game.gtimg.cn/images/yxzj/img201606/skin/hero-info/ + 英雄编号 + &quot;/&quot; + 英雄编号-bigskin-皮肤序号 + &quot;.jpg&quot;</span></span><br><span class="line">    <span class="comment">#这是图片url的格式</span></span><br></pre></td></tr></table></figure>
+
+<p>   3，构建皮肤数量循环（使用for循环）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> skin_num <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(skin_name) + <span class="number">1</span>):</span><br><span class="line">        skin_url = <span class="string">&#x27;http://game.gtimg.cn/images/yxzj/img201606/skin/hero-info/&#x27;</span> + <span class="built_in">str</span>(ename) + <span class="string">&#x27;/&#x27;</span> + <span class="built_in">str</span>(</span><br><span class="line">            ename) + <span class="string">&#x27;-bigskin-&#x27;</span> + <span class="built_in">str</span>(skin_num) + <span class="string">&#x27;.jpg&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>4，请求图片数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">skin_data = requests.get(skin_url).content</span><br></pre></td></tr></table></figure>
+
+<h2 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h2><p>保存数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;img\\&#x27;</span> + cname + <span class="string">&quot;-&quot;</span> + skin_name[skin_num - <span class="number">1</span>] + <span class="string">&#x27;.jpg&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;正在下载皮肤：&#x27;</span>, cname + <span class="string">&quot;-&quot;</span> + skin_name[skin_num - <span class="number">1</span>])</span><br><span class="line">            f.write(skin_data)</span><br></pre></td></tr></table></figure>
+
+<p>到这里就差不多结束了</p>
+<h1 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h1><p>下面是一个完整代码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">base_url = <span class="string">&#x27;https://pvp.qq.com/web201605/js/herolist.json&#x27;</span></span><br><span class="line">response = requests.get(base_url)</span><br><span class="line">data_str = response.text</span><br><span class="line">data_list = json.loads(data_str)</span><br><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> data_list:</span><br><span class="line">    ename = data[<span class="string">&#x27;ename&#x27;</span>]  <span class="comment"># 英雄编号</span></span><br><span class="line">    cname = data[<span class="string">&#x27;cname&#x27;</span>]  <span class="comment"># 英雄名字</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        skin_name = data[<span class="string">&#x27;skin_name&#x27;</span>].split(<span class="string">&#x27;|&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">    <span class="keyword">for</span> skin_num <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(skin_name) + <span class="number">1</span>):</span><br><span class="line">        skin_url = <span class="string">&#x27;http://game.gtimg.cn/images/yxzj/img201606/skin/hero-info/&#x27;</span> + <span class="built_in">str</span>(ename) + <span class="string">&#x27;/&#x27;</span> + <span class="built_in">str</span>(</span><br><span class="line">            ename) + <span class="string">&#x27;-bigskin-&#x27;</span> + <span class="built_in">str</span>(skin_num) + <span class="string">&#x27;.jpg&#x27;</span></span><br><span class="line">        skin_data = requests.get(skin_url).content</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;img\\&#x27;</span> + cname + <span class="string">&quot;-&quot;</span> + skin_name[skin_num - <span class="number">1</span>] + <span class="string">&#x27;.jpg&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;正在下载皮肤：&#x27;</span>, cname + <span class="string">&quot;-&quot;</span> + skin_name[skin_num - <span class="number">1</span>])</span><br><span class="line">            f.write(skin_data) </span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：要在目录下新建一个img的文件夹</p>
+<hr>
+<p><strong>想白嫖王者海报图的同学</strong>–&gt;<a href="https://www.lanzous.com/iat8oub">转送门</a></p>
+]]></content>
+      <categories>
+        <category>Python案例</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+        <tag>王者荣耀</tag>
+        <tag>图片</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>爬取某网站小姐姐壁纸</title>
+    <url>/post/xiaojiejiebizhi/</url>
+    <content><![CDATA[<span id="more"></span>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><blockquote>
+<p>美桌壁纸小姐姐壁纸爬取</p>
+</blockquote>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ul>
+<li>PYthon3.8（我用的是这个版本的）</li>
+<li>pycharm （其他的编辑器也可以）</li>
+<li>模块：requests，parsel，os</li>
+</ul>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>爬虫的思路</p>
+<ol>
+<li>分析目标网页，确定爬取的url路径，headers参数</li>
+<li>发送请求 – requests 模拟浏览器发送请求，获取响应数据</li>
+<li>解析数据 – parsel  转化为Selector对象，Selector对象具有xpath的方法，能够对转化的数据进行处理</li>
+<li>保存数据</li>
+</ol>
+<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>确定爬取的url路径，headers参数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">base_url = <span class="string">&#x27;http://www.win4000.com/mobile_2340_0_0_1.html&#x27;</span></span><br><span class="line">headers = &#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>User-Agent在浏览器的F12 Network里面获取（里面找到headers，在最下面就有你自己浏览器的User-Agent参数）</p>
+<h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p>发送请求 – requests 模拟浏览器发送请求，获取响应数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">response = requests.get(base_url, headers=headers)</span><br><span class="line">data = response.text</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h2><p>解析数据 – parsel  转化为Selector对象，Selector对象具有xpath的方法，能够对转化的数据进行处理</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">html_data = parsel.Selector(data)</span><br><span class="line">data_list = html_data.xpath(<span class="string">&#x27;//div[@class=&quot;Left_bar&quot;]//ul/li/a/@href|//div[@class=&quot;Left_bar&quot;]//ul/li/a/@title&#x27;</span>).extract()</span><br></pre></td></tr></table></figure>
+
+<p>使用列表推导式对列表进行分组</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data_list = [data_list[i:i + <span class="number">2</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(data_list), <span class="number">2</span>)]</span><br></pre></td></tr></table></figure>
+
+<p>创建图片的文件夹</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;img\\&#x27;</span> + file_name):</span><br><span class="line">    os.mkdir(<span class="string">&#x27;img\\&#x27;</span> + file_name)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;正在下载：&#x27;</span>, file_name)</span><br></pre></td></tr></table></figure>
+
+<p>发送详情页的请求,解析出总页数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">response_2 = requests.get(html_url, headers=headers).text</span><br><span class="line">html_2 = parsel.Selector(response_2)</span><br><span class="line">page_num = html_2.xpath(<span class="string">&#x27;//div[@class=&quot;ptitle&quot;]//em/text()&#x27;</span>).extract_first()</span><br></pre></td></tr></table></figure>
+
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>构建相册翻页的url地址，解析每一页的图片url地址，保存数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> url <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">int</span>(page_num) + <span class="number">1</span>):</span><br><span class="line">	url_list = html_url.split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">	all_url = url_list[<span class="number">0</span>] + <span class="string">&#x27;.&#x27;</span> + url_list[<span class="number">1</span>] + <span class="string">&#x27;.&#x27;</span> + url_list[<span class="number">2</span>] + <span class="string">&#x27;_&#x27;</span> + <span class="built_in">str</span>(url) + <span class="string">&#x27;.&#x27;</span> + url_list[<span class="number">3</span>]</span><br><span class="line">	response_3 = requests.get(all_url, headers=headers).text</span><br><span class="line">	html_3 = parsel.Selector(response_3)</span><br><span class="line">	img_url = html_3.xpath(<span class="string">&#x27;//div[@class=&quot;pic-meinv&quot;]//img/@src&#x27;</span>).extract_first()</span><br><span class="line">	img_data = requests.get(img_url, headers=headers).content</span><br><span class="line">	<span class="comment"># 图片的文件名</span></span><br><span class="line">	img_name = <span class="built_in">str</span>(url) + <span class="string">&#x27;.jpg&#x27;</span></span><br><span class="line">	<span class="comment"># 保存数据</span></span><br><span class="line">	<span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;img\\&#123;&#125;\\&#x27;</span>.<span class="built_in">format</span>(file_name) + img_name, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&#x27;下载完成：&#x27;</span>, img_name)</span><br><span class="line">		f.write(img_data)</span><br></pre></td></tr></table></figure>
+
+<h1 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> parsel</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">base_url = <span class="string">&#x27;http://www.win4000.com/mobile_2340_0_0_1.html&#x27;</span></span><br><span class="line">headers = &#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36&#x27;</span>&#125;</span><br><span class="line">response = requests.get(base_url, headers=headers)</span><br><span class="line">data = response.text</span><br><span class="line">html_data = parsel.Selector(data)</span><br><span class="line">data_list = html_data.xpath(<span class="string">&#x27;//div[@class=&quot;Left_bar&quot;]//ul/li/a/@href|//div[@class=&quot;Left_bar&quot;]//ul/li/a/@title&#x27;</span>).extract()</span><br><span class="line">data_list = [data_list[i:i + <span class="number">2</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(data_list), <span class="number">2</span>)]</span><br><span class="line"><span class="keyword">for</span> alist <span class="keyword">in</span> data_list:</span><br><span class="line">    html_url = alist[<span class="number">0</span>]</span><br><span class="line">    file_name = alist[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;img\\&#x27;</span> + file_name):</span><br><span class="line">        os.mkdir(<span class="string">&#x27;img\\&#x27;</span> + file_name)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;正在下载：&#x27;</span>, file_name)</span><br><span class="line">    response_2 = requests.get(html_url, headers=headers).text</span><br><span class="line">    html_2 = parsel.Selector(response_2)</span><br><span class="line">    page_num = html_2.xpath(<span class="string">&#x27;//div[@class=&quot;ptitle&quot;]//em/text()&#x27;</span>).extract_first()</span><br><span class="line">    <span class="keyword">for</span> url <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">int</span>(page_num) + <span class="number">1</span>):</span><br><span class="line">        url_list = html_url.split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">        all_url = url_list[<span class="number">0</span>] + <span class="string">&#x27;.&#x27;</span> + url_list[<span class="number">1</span>] + <span class="string">&#x27;.&#x27;</span> + url_list[<span class="number">2</span>] + <span class="string">&#x27;_&#x27;</span> + <span class="built_in">str</span>(url) + <span class="string">&#x27;.&#x27;</span> + url_list[<span class="number">3</span>]</span><br><span class="line">        response_3 = requests.get(all_url, headers=headers).text</span><br><span class="line">        html_3 = parsel.Selector(response_3)</span><br><span class="line">        img_url = html_3.xpath(<span class="string">&#x27;//div[@class=&quot;pic-meinv&quot;]//img/@src&#x27;</span>).extract_first()</span><br><span class="line">        img_data = requests.get(img_url, headers=headers).content</span><br><span class="line">        img_name = <span class="built_in">str</span>(url) + <span class="string">&#x27;.jpg&#x27;</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;img\\&#123;&#125;\\&#x27;</span>.<span class="built_in">format</span>(file_name) + img_name, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;下载完成：&#x27;</span>, img_name)</span><br><span class="line">            f.write(img_data)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>快去试水吧，记得多准备几瓶营养快线(ಥ_ಥ)</strong> </p>
+<p>说明：这个代码并不能爬取全站图片，详细的自己研究</p>
+<hr>
+<p><strong>想要图片但懒得下载的走这边</strong>–&gt;<strong><a href="https://www.lanzous.com/b0d7yfn6j">转送门</a></strong><br>好像不是特别全上传的时候似乎漏掉了几个</p>
+<hr>
+<p>偶然发现pyinstaller这个模块，这个模块可以把py程序封装成exe程序，在没有py环境的电脑上也可以运行<br>想要的同学可以直接下载，exe软件下载地址–&gt;<strong><a href="https://www.lanzous.com/b0d7ykpvg">传送门</a></strong></p>
+<p><img src="https://cdn.seovx.com/?mom=302" alt="预览"></p>]]></content>
+      <categories>
+        <category>Python案例</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+        <tag>图片</tag>
+        <tag>壁纸</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>制作随机图片/视频api（本地/外链）</title>
+    <url>/post/imgvideoapi/</url>
+    <content><![CDATA[<h1 id="本地图片API"><a href="#本地图片API" class="headerlink" title="本地图片API"></a>本地图片API</h1><p>制作方法</p>
+<p>新建一个PHP文件（名字可以自己取），在创建一个img文件夹，把图片放进去</p>
+<p>把php文件和img文件夹上传到服务器然后访问域名/PHP文件名就可以啦</p>
+<p>php代码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$img_array</span> = glob(<span class="string">&quot;img/*.&#123;gif,jpg,png&#125;&quot;</span>,GLOB_BRACE); </span><br><span class="line"><span class="variable">$img</span> = array_rand(<span class="variable">$img_array</span>); </span><br><span class="line"><span class="variable">$dz</span> = <span class="variable">$img_array</span>[<span class="variable">$img</span>];</span><br><span class="line">header(<span class="string">&quot;Location:&quot;</span>.<span class="variable">$dz</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="外链图片API"><a href="#外链图片API" class="headerlink" title="外链图片API"></a>外链图片API</h1><p>制作方法</p>
+<p>新建一个PHP文件（名字可以自己取）， images.txt文档文件，把外链图片地址放进去</p>
+<p>把php文件和txt文档上传到服务器里就可以啦</p>
+<p>PHP代码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$arr</span>=file(<span class="string">&#x27;images.txt&#x27;</span>);</span><br><span class="line"><span class="variable">$n</span>=count(<span class="variable">$arr</span>)-<span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">1</span>;<span class="variable">$i</span>&lt;=<span class="number">1</span>;<span class="variable">$i</span>++)&#123;</span><br><span class="line"><span class="variable">$x</span>=rand(<span class="number">0</span>,<span class="variable">$n</span>);</span><br><span class="line">header(<span class="string">&quot;Location:&quot;</span>.<span class="variable">$arr</span>[<span class="variable">$x</span>],<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="本地视频API"><a href="#本地视频API" class="headerlink" title="本地视频API"></a>本地视频API</h1><p>创建一个video的文件夹，视频放进去，和本地图片API差不多</p>
+<p>php代码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$video_array</span> = glob(<span class="string">&quot;video/*.&#123;mp4&#125;&quot;</span>,GLOB_BRACE); </span><br><span class="line"><span class="variable">$video</span> = array_rand(<span class="variable">$video_array</span>); </span><br><span class="line"><span class="variable">$dz</span> = <span class="variable">$video_array</span>[<span class="variable">$video</span>];</span><br><span class="line">header(<span class="string">&quot;Location:&quot;</span>.<span class="variable">$dz</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>经验教程</category>
+      </categories>
+      <tags>
+        <tag>随机图片</tag>
+        <tag>API</tag>
+        <tag>代码</tag>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>爬取免费代理IP</title>
+    <url>/post/dailiip/</url>
+    <content><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><blockquote>
+<p>每次爬网站的时候总是被一些网站的反爬机制给封IP，所以就需要一些代理IP，但是很多代理IP都要钱，不要钱的很多不能用，所以就写了这么个代码来爬取代理IP</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><ol>
+<li>确定爬取的url路径，headers参数</li>
+<li>发送请求 – requests 模拟浏览器发送请求，获取响应数据</li>
+<li>解析数据 – parsel  转化为Selector对象，Selector对象具有xpath的方法，能够对转化的数据进行处理</li>
+<li>保存数据</li>
+</ol>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ul>
+<li>PYthon3.7</li>
+<li>pycharm （其他的编辑器也可以）</li>
+<li>模块 requests parsel time(安装模块指令<code>pip install requests &amp;&amp; pip install parsel</code>)</li>
+</ul>
+<h1 id="目标网站"><a href="#目标网站" class="headerlink" title="目标网站"></a>目标网站</h1><p><a href="https://www.kuaidaili.com/free">https://www.kuaidaili.com/free</a></p>
+<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>导入模块，确定爬取的url路径，headers参数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> parsel</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">base_url = <span class="string">&#x27;https://www.kuaidaili.com/free/inha/1/&#x27;</span></span><br><span class="line">headers = &#123;</span><br><span class="line">	<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p>发送请求 – requests 模拟浏览器发送请求，获取响应数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">response = requests.get(base_url, headers=headers)</span><br><span class="line">data = response.text</span><br></pre></td></tr></table></figure>
+
+<h2 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h2><p>解析数据 – parsel  转化为Selector对象，Selector对象具有xpath的方法，能够对转化的数据进行处理</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">html_data = parsel.Selector(data)</span><br><span class="line">parse_list = html_data.xpath(<span class="string">&#x27;//table[@class=&quot;table table-bordered table-striped&quot;]/tbody/tr&#x27;</span>)  <span class="comment"># 返回Selector对象</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h2><p>循环遍历，二次提取，构建代理ip字典</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">	<span class="keyword">for</span> tr <span class="keyword">in</span> parse_list:</span><br><span class="line">		proxies_dict = &#123;&#125;</span><br><span class="line">		http_type = tr.xpath(<span class="string">&#x27;./td[4]/text()&#x27;</span>).extract_first()</span><br><span class="line">		ip_num = tr.xpath(<span class="string">&#x27;./td[1]/text()&#x27;</span>).extract_first()</span><br><span class="line">		port_num = tr.xpath(<span class="string">&#x27;./td[2]/text()&#x27;</span>).extract_first()</span><br><span class="line">		proxies_dict[http_type] = ip_num + <span class="string">&#x27;:&#x27;</span> + port_num</span><br><span class="line">		<span class="built_in">print</span>(proxies_dict)</span><br><span class="line">		proxies_list.append(proxies_dict)</span><br><span class="line">		time.sleep(<span class="number">0.5</span>)</span><br><span class="line"><span class="built_in">print</span>(proxies_list)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;获取到的代理ip数量：&quot;</span>, <span class="built_in">len</span>(proxies_list), <span class="string">&#x27;个&#x27;</span>)		</span><br></pre></td></tr></table></figure>
+
+<h2 id="第五步"><a href="#第五步" class="headerlink" title="第五步"></a>第五步</h2><p>检测代理ip可用性，用获取到的IP访问百度或者其他网站，就可以检测其可用性</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_ip</span>(<span class="params">proxies_list</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;检测ip的方法&quot;&quot;&quot;</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36&#x27;</span>&#125;</span><br><span class="line"> </span><br><span class="line">    can_use = []</span><br><span class="line">    <span class="keyword">for</span> proxy <span class="keyword">in</span> proxies_list:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            response = requests.get(<span class="string">&#x27;http://www.baidu.com&#x27;</span>, headers=headers, proxies=proxy, timeout=<span class="number">0.1</span>)  <span class="comment"># 超时报错</span></span><br><span class="line">            <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">                can_use.append(proxy)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> error:</span><br><span class="line">            <span class="built_in">print</span>(error)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;当前ip：&quot;</span>, proxy, <span class="string">&#x27;检测完成&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> can_use</span><br></pre></td></tr></table></figure>
+
+<p>打印出数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">can_use = check_ip(proxies_list)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;能用的代理：&quot;</span>, can_use)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;能用的代理数量：&quot;</span>, <span class="built_in">len</span>(can_use))</span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<h1 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> parsel</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_ip</span>(<span class="params">proxies_list</span>):</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36&#x27;</span>&#125;</span><br><span class="line"> </span><br><span class="line">    can_use = []</span><br><span class="line">    <span class="keyword">for</span> proxy <span class="keyword">in</span> proxies_list:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            response = requests.get(<span class="string">&#x27;http://www.baidu.com&#x27;</span>, headers=headers, proxies=proxy, timeout=<span class="number">0.1</span>)  <span class="comment"># 超时报错</span></span><br><span class="line">            <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">                can_use.append(proxy)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> error:</span><br><span class="line">            <span class="built_in">print</span>(error)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;当前ip：&quot;</span>, proxy, <span class="string">&#x27;检测完成&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> can_use</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">proxies_list = []</span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10</span>): <span class="comment">#更换数字，选择爬取页数</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;++++++++++++++++++++++++++++正在爬取第&#123;&#125;页数据+++++++++++++++++++++++++++++&#x27;</span>.<span class="built_in">format</span>(page))</span><br><span class="line">    base_url = <span class="string">&#x27;https://www.kuaidaili.com/free/inha/&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(page)</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line">    response = requests.get(base_url, headers=headers)</span><br><span class="line">    data = response.text</span><br><span class="line">    html_data = parsel.Selector(data)</span><br><span class="line">    parse_list = html_data.xpath(<span class="string">&#x27;//table[@class=&quot;table table-bordered table-striped&quot;]/tbody/tr&#x27;</span>)  <span class="comment"># 返回Selector对象</span></span><br><span class="line">    <span class="keyword">for</span> tr <span class="keyword">in</span> parse_list:</span><br><span class="line">        proxies_dict = &#123;&#125;</span><br><span class="line">        http_type = tr.xpath(<span class="string">&#x27;./td[4]/text()&#x27;</span>).extract_first()</span><br><span class="line">        ip_num = tr.xpath(<span class="string">&#x27;./td[1]/text()&#x27;</span>).extract_first()</span><br><span class="line">        port_num = tr.xpath(<span class="string">&#x27;./td[2]/text()&#x27;</span>).extract_first()</span><br><span class="line">        proxies_dict[http_type] = ip_num + <span class="string">&#x27;:&#x27;</span> + port_num</span><br><span class="line">        <span class="built_in">print</span>(proxies_dict)</span><br><span class="line">        proxies_list.append(proxies_dict)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line"> </span><br><span class="line"><span class="built_in">print</span>(proxies_list)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;获取到的代理ip数量：&quot;</span>, <span class="built_in">len</span>(proxies_list), <span class="string">&#x27;个&#x27;</span>)</span><br><span class="line">can_use = check_ip(proxies_list)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;能用的代理：&quot;</span>, can_use)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;能用的代理数量：&quot;</span>, <span class="built_in">len</span>(can_use))	</span><br></pre></td></tr></table></figure>
+
+<hr>
+<blockquote class="blockquote-center" >使用代理访问的食用方法</blockquote>
+
+<p><strong>就拿我们经常使用的 requests 库来说</strong></p>
+<p>使用代理 ip 方法如下</p>
+<ol>
+<li>定义代理IP</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">proxies = &#123; </span><br><span class="line">        <span class="string">&#x27;http&#x27;</span> : <span class="string">&#x27;http://xx.xxx.xxx.xxx:xxxx&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;http&#x27;</span> : <span class="string">&#x27;http://xxx.xx.xx.xxx:xxx&#x27;</span>,</span><br><span class="line">        ....</span><br><span class="line">    &#125;  </span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用代理</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">response = requests.get(url,proxies=proxies)</span><br></pre></td></tr></table></figure>
+<p>和请求头放一起</p>
+<hr>
+<p>接下来就可以创建一个属于自己的IP池了</p>
+]]></content>
+      <categories>
+        <category>Python案例</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+        <tag>代理IP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>力扣做题笔记（1）：重新排列数组</title>
+    <url>/post/leetcode-1/</url>
+    <content><![CDATA[<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给你一个数组 <code>nums</code> ，数组中有 <code>2n</code> 个元素，按 <code>[x1,x2,...,xn,y1,y2,...,yn]</code> 的格式排列。</p>
+<p>请你将数组按 <code>[x1,y1,x2,y2,...,xn,yn]</code> 格式重新排列，返回重排后的数组。</p>
+<p>示例 ：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [2,5,1,3,4,7], n = 3</span><br><span class="line">输出：[2,3,5,4,1,7] </span><br><span class="line">解释：由于 x1=2, x2=5, x3=1, y1=3, y2=4, y3=7 ，所以答案为 [2,3,5,4,1,7]</span><br></pre></td></tr></table></figure>
+
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/shuffle-the-array">https://leetcode-cn.com/problems/shuffle-the-array</a></p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><ol>
+<li><p>先通过循环把x和y分别给两个数组。</p>
+</li>
+<li><p>在把两个数组交叉合并</p>
+</li>
+</ol>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] shuffle(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] Array = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span> * n];</span><br><span class="line">        <span class="keyword">int</span>[] Arrayx = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="keyword">int</span>[] Arrayy = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">0</span>, b = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Arrayx.length; i++) &#123;<span class="comment">//把数组的前n个给x数组</span></span><br><span class="line">            Arrayx[i] = nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Arrayy.length; i++) &#123;<span class="comment">//把数组的后n个给y数组</span></span><br><span class="line">            Arrayy[i] = nums[i+n];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Array.length; i++) &#123;<span class="comment">//把x和y数组交叉合并</span></span><br><span class="line">            <span class="keyword">if</span> (i % <span class="number">2</span> ==<span class="number">0</span>)&#123;</span><br><span class="line">                Array[i] = Arrayx[a++];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Array[i] = Arrayy[b++];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Array;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>JAVA</tag>
+        <tag>力扣</tag>
+        <tag>做题笔记</tag>
+        <tag>数组</tag>
+      </tags>
+  </entry>
+</search>

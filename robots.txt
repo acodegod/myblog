@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Allow: /posts/
+Allow: /home/
+Allow: /about/
+Disallow: /js/
+Disallow: /css/
+Disallow: /vendors/
+Disallow: /fancybox/
+Disallow: /archives/
+Disallow: /contact/
+Disallow: /fonts/
+Disallow: /link/
+Disallow: /page/
+Disallow: /tags/
+Disallow: /categories/
+
+Sitemap: https://blog.bugjava.cn/sitemap.xml
+Sitemap: https://blog.bugjava.cn/baidusitemap.xml
